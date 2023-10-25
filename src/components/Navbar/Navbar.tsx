@@ -4,13 +4,13 @@ import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import ActionButton from "@/components/ActionButton";
-import homeLogo from "@/../public/homeLogo.png";
-import Image from "next/image";
 
 type Props = {
     selectedPage: SelectedPage;
     setSelectedPage: (value: SelectedPage) => void;
 };
+
+/* Need to update the styles.... later. -H */ 
 
 export default function Navbar({ selectedPage, setSelectedPage }: Props) {
     const flexBetween = "flex items-center justify-between";
@@ -52,14 +52,6 @@ export default function Navbar({ selectedPage, setSelectedPage }: Props) {
                                 />
 
                             </div>
-                            <div className={`${flexBetween} gap-8`}>
-                                <p>Sign In</p>
-                                {/* The actionbutton may not be set up right,
-                                 I merged this as best I could but the original did not compile */}
-                                <ActionButton setSelectedPage={setSelectedPage}>
-                                    Become a Member
-                                </ActionButton>
-                            </div>
                         </div>)
                         : (
                             <button
@@ -73,8 +65,6 @@ export default function Navbar({ selectedPage, setSelectedPage }: Props) {
             </div>
 
         </div>
-        <div className={`${flexBetween} fixed top-0 z-30 w-full h-screen justify-center items-center`}>
-            <Image src={homeLogo} alt="Home Logo" />
-        </div>
+
     </nav>;
 };
