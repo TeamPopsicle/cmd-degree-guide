@@ -5,7 +5,7 @@ import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
 
-/* We may want to redesign the Navbar as a set of links. */ 
+/* We may want to redesign the Navbar as a set of links. */
 
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
     setSelectedPage: (value: SelectedPage) => void;
 };
 
-/* Need to update the styles.... later. -H */ 
+/* Need to update the styles.... later. -H */
 
 export default function Navbar({ selectedPage, setSelectedPage }: Props) {
     const flexBetween = "flex items-center justify-between";

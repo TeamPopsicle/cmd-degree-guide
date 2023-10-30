@@ -3,10 +3,10 @@ import { useState } from "react";
 
 export default function DBTesting() {
     const [classListShown, setClassListShown] = useState(false);
-    const [classes, setClasses] = useState<{ Major: string; ClassNumber: string; Prereqs: string }[]>([]);
+    const [classes, setClasses] = useState<{ Major: string; ClassNumber: string; PrereqFor: string }[]>([]);
 
     async function handleInsertQuery() {
-        const queryContent = "INSERT INTO Classes (Major, ClassNumber, Prereqs) VALUES ('CS', '422', 'CS 315')";
+        const queryContent = "INSERT INTO Classes (Major, ClassNumber, PrereqFor) VALUES ('CS', '210', 'CS 211')";
         const responseObject = await sendQuery(queryContent);
         console.log('Response:', responseObject);
     }
@@ -33,7 +33,7 @@ export default function DBTesting() {
                         <li key={index}>
                             <strong>Major:</strong> {classItem.Major}<br />
                             <strong>Class Number:</strong> {classItem.ClassNumber}<br />
-                            <strong>Prerequisites:</strong> {classItem.Prereqs}
+                            <strong>Prerequisite For:</strong> {classItem.PrereqFor}
                         </li>
                     ))}
                 </ul>

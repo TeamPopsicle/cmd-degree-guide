@@ -16,57 +16,57 @@
   }
 }
 
-/* Need to review Tailwind css tomorrow. -H  */ 
+/* Need to review Tailwind css tomorrow. -H  */
 
-/* Might factor these CSS rules out into... modules? */ 
+/* Might factor these CSS rules out into... modules? */
 
-body { 
-    font-family: "DM Sans", sans-serif; 
+body {
+  font-family: "DM Sans", sans-serif;
 }
 
-h1 { 
-  font-size: 200%; 
-  text-align: center; 
-  font-weight: bold; 
-  font-family: "Andale Mono", monospace; 
-  color: green; 
-  display: block; 
-  margin: 5% auto 0% auto;  
+h1 {
+  font-size: 200%;
+  text-align: center;
+  font-weight: bold;
+  font-family: "Andale Mono", monospace;
+  color: green;
+  display: block;
+  margin: 5% auto 0% auto;
 }
 
-/* pixel measurements need to be converted for responsive displays */ 
-.actionButton {  
-  margin: 75px 50px 25px 50px; 
-  display: flex;  
+/* pixel measurements need to be converted for responsive displays */
+.actionButton {
+  margin: 75px 50px 25px 50px;
+  display: flex;
   justify-content: center;
 }
 
-.actionButton a { 
-    display: inline-block;
-    width: 25%; 
-    margin-right: 5%;
-    margin-left: 5%;
-    text-align: center; 
-    padding: 2.5%; 
-    border: 1px solid green;
-    border-radius: 15px; 
-    background-color: green; 
-    color: white; 
+.actionButton a {
+  display: inline-block;
+  width: 25%;
+  margin-right: 5%;
+  margin-left: 5%;
+  text-align: center;
+  padding: 2.5%;
+  border: 1px solid green;
+  border-radius: 15px;
+  background-color: green;
+  color: white;
 }
 
-.actionButton a:hover { 
-  background-color: yellow; 
-  border-color: green; 
-  color: green; 
+.actionButton a:hover {
+  background-color: yellow;
+  border-color: green;
+  color: green;
 }
 
-.displayBox { 
-    display: block; 
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5%; 
-    width: 50%; 
-    padding: 100px 50px 75px 50px; 
-    background-color: rgba(253,246,208,255); 
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.19), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+.displayBox {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  width: 50%;
+  padding: 100px 50px 75px 50px;
+  background-color: rgba(253, 246, 208, 255);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.19), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
