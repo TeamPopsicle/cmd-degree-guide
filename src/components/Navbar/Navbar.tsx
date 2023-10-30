@@ -3,7 +3,10 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import ActionButton from "@/components/ActionButton";
+
+
+/* We may want to redesign the Navbar as a set of links. */ 
+
 
 type Props = {
     selectedPage: SelectedPage;

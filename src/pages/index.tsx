@@ -27,9 +27,9 @@ export default function Home() {
       {/* I could factor these div classes out into components, but seeing as I 
       don't think they'll be reused I'm not sure it's particularly useful to do so. 
       Open to opinions. -H */}
-      <div className="landing">
+      <div className="displayBox">
         <Image src={homeLogo} alt="CMD Degree Guide Logo"/>
-        <div className="signInLinks">
+        <div className="actionButton">
           <Link href="/login" id="loginButton">Log In</Link> 
           <Link href="/signup" id="signupButton"> Create Account</Link>
         </div>

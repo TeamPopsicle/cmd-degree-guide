@@ -1,12 +1,14 @@
-export default function login() { 
+import Form from "@/components/Form"; 
+
+export default function Login() { 
 
     return ( 
         <>
-            <h1> This is the login page!</h1> 
+            <h1> Log In </h1> 
+            <div className="displayBox">
+                <Form name="Login"/>
+            </div> 
         </>
-
-    /* The login/signup forms will have extremely similar function so I plan
-    to implement the form as a component */ 
 
     )
 
