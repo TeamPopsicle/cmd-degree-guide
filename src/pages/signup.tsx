@@ -21,7 +21,7 @@ export default function Signup() {
                     setRegistrationMessage("New account created successfully! Redirecting in 3 seconds...");
                     // Wait 3 seconds, then redirect
                     setTimeout(() => {
-                        router.push("schedulebuilder");
+                        router.push("/courseselection");
                     }, 3000)
                 }
             } else {
