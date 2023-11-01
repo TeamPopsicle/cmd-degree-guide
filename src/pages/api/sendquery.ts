@@ -16,7 +16,7 @@ const db = mysql({
  * such as APIs and getServerSideProps; this should not be used in client-side code
  * @param query A string that will send the SQL string to the connected database
  */
-export async function executeQuery(query: string) {
+export async function executeQuery(query: string, params: any[] = []) {
     try {
         db.connect()
             .then(() => {
@@ -25,7 +25,7 @@ export async function executeQuery(query: string) {
             .catch((err) => {
                 console.error('Error connecting to the database:', err);
             });
-        const results = await db.query(query);
+        const results = await db.query(query, params);
         await db.end();
         return results;
     } catch (error) {
@@ -36,8 +36,8 @@ export async function executeQuery(query: string) {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         try {
-            const { content } = req.body;
-            const result = await executeQuery(content);
+            const { content, params } = req.body;
+            const result = await executeQuery(content, params);
             res.status(200).json({ response: result });
             console.log("success.", result)
         } catch (error) {

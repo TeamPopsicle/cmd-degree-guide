@@ -1,4 +1,6 @@
-export default function Form( {name} : {name: string} ) { 
+import { useState } from "react";
+
+export default function Form( {name, onLogin} : {name: string, onLogin: (username: string, password: string) => void} ) { 
 
     /* 
     STILL NEEDED: A way to display an appropriate error message when login is unsuccessful. 
@@ -20,13 +22,23 @@ export default function Form( {name} : {name: string} ) {
 
     -H
     */ 
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
     return ( 
     <>
-        <form action="" name={name}> 
+        <form
+        action="" 
+        name={name}
+        onSubmit={e => {
+            e.preventDefault();
+            onLogin(username, password);
+        }}> 
             <label>Username:</label>
-            <p><input name="username"/></p>
+            <p><input name="username" onChange={e => setUsername(e.target.value)}/></p>
             <label>Password:</label>
-            <p><input name="password"/></p> 
+            <p><input name="password" onChange={e => setPassword(e.target.value)} type="password"/></p> 
             <button type="submit">Submit</button>
         </form> 
     </>
