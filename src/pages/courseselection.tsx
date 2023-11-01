@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState} from "react";
-import './CourseSelectionPage.module.css'; 
+import '../styles/courseselection.module.css'; 
 import { stringify } from 'querystring';
 
 function CourseSelectionPage() {
@@ -9,7 +9,6 @@ function CourseSelectionPage() {
   const buttonClick = (button: string) => {
     setSelectedButton(button);
   }
-
 
 
   return (

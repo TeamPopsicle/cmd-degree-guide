@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar/Navbar";
 import Form from "@/components/Form"; 
 import { sendQuery } from "@/lib/dbclient";
 import { useRouter } from "next/router";
@@ -36,9 +37,10 @@ export default function Signup() {
 
     return ( 
         <>
+            <Navbar/>
             <h1>Sign Up</h1> 
             <div className="displayBox">
-                {/* If we want to tell users about any username/password descriptions, put them here, 
+                {/* If we want to tell users about any username/password requirements, put them here, 
                 put them here. */} 
                 <Form name="Login" onLogin={handleLogin}/>
                 {registrationMessage && <p className="text-red-500">{registrationMessage}</p>}

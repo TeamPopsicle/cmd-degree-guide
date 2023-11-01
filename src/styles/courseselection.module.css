@@ -1,4 +1,4 @@
-/* course selection page and table layout.css */
+/* course selection page and table layout css */
 
 .body {
     background-color: #fbf4cf; 
@@ -47,22 +47,9 @@
 
 .table-container {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 50em;
 }
 
-table {
-    border-collapse: collapse;
-    width: 80%;
-    margin: 0 auto;
-}
-
-table, th, td {
-    border: 1px solid #333;
-}
-
-th, td {
-    padding: 10px;
-}
 
 /* Style the table-container when a button is selected */
 .button-1.selected + .table-container {

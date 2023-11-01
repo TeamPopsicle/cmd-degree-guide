@@ -1,7 +1,9 @@
+import Navbar from "@/components/Navbar/Navbar";
 import Form from "@/components/Form";
 import { sendQuery } from "@/lib/dbclient";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
 
 export default function Login() { 
     const [loginMessage, setLoginMessage] = useState("");
@@ -31,6 +33,7 @@ export default function Login() {
 
     return ( 
         <>
+            <Navbar/>
             <h1> Log In </h1> 
             <div className="displayBox">
                 <Form name="Login" onLogin={handleLogin}/>

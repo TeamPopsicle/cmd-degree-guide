@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
-import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import Link from 'next/link';
 
+/* Redesigned the navbar as a set of page links. Currently they link to blank pages. 
 
-/* We may want to redesign the Navbar as a set of links. */
+    TODO: 
+        - Write About page 
+        - Write contact info 
+        - Fix Navbar styles */ 
 
-
+/* 
 type Props = {
     selectedPage: SelectedPage;
     setSelectedPage: (value: SelectedPage) => void;
 };
 
-/* Need to update the styles.... later. -H */
+*/ 
+
 
 export default function Navbar({ selectedPage, setSelectedPage }: Props) {
     const flexBetween = "flex items-center justify-between";
@@ -33,26 +38,9 @@ export default function Navbar({ selectedPage, setSelectedPage }: Props) {
                     {isAboveMediumScreens ? (
                         <div className={`${flexBetween} w-full`}>
                             <div className={`${flexBetween} gap-8 text-sm`}>
-                                <Link
-                                    page="Home"
-                                    selectedPage={selectedPage}
-                                    setSelectedPage={setSelectedPage}
-                                />
-                                <Link
-                                    page="About"
-                                    selectedPage={selectedPage}
-                                    setSelectedPage={setSelectedPage}
-                                />
-                                <Link
-                                    page="Courses"
-                                    selectedPage={selectedPage}
-                                    setSelectedPage={setSelectedPage}
-                                />
-                                <Link
-                                    page="Contact Us"
-                                    selectedPage={selectedPage}
-                                    setSelectedPage={setSelectedPage}
-                                />
+                                <Link href="/">Home</Link>
+                                <Link href="/about">About</Link>
+                                <Link href="/contact">Contact Us</Link>
 
                             </div>
                         </div>)
