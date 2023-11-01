@@ -36,9 +36,9 @@ export default function Form( {name, onLogin} : {name: string, onLogin: (usernam
             onLogin(username, password);
         }}> 
             <label>Username:</label>
-            <p><input name="username" onChange={e => setUsername(e.target.value)}/></p>
+            <p><input name="username" onChange={e => setUsername(e.target.value)} autoComplete="off" required/></p>
             <label>Password:</label>
-            <p><input name="password" onChange={e => setPassword(e.target.value)} type="password"/></p> 
+            <p><input name="password" onChange={e => setPassword(e.target.value)} type="password" required/></p> 
             <button type="submit">Submit</button>
         </form> 
     </>

@@ -18,7 +18,7 @@ export default function Signup() {
                 const registerUserContent = "INSERT INTO `cmd_degree_guide`.`Users` (`username`, `password`) VALUES (?, ?)";
                 const registerResponseObject = await sendQuery(registerUserContent, username, password);
                 if (registerResponseObject) {
-                    setRegistrationMessage("New account created successfully! Redirecting in 3 seconds..");
+                    setRegistrationMessage("New account created successfully! Redirecting in 3 seconds...");
                     // Wait 3 seconds, then redirect
                     setTimeout(() => {
                         router.push("schedulebuilder");
@@ -41,7 +41,7 @@ export default function Signup() {
                 {/* If we want to tell users about any username/password descriptions, put them here, 
                 put them here. */} 
                 <Form name="Login" onLogin={handleLogin}/>
-                {registrationMessage && <p>{registrationMessage}</p>}
+                {registrationMessage && <p className="text-red-500">{registrationMessage}</p>}
             </div> 
         </>       
     )
