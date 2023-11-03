@@ -1,6 +1,6 @@
 #prereq storage for now:
 #less expensive than using the dag and looking for prereqs due to its structure
-prereqs = {'210': [''], '211': ['210'], '212': ['211'], '231': [''], '232': ['231'], '313': ['212', '232'], '314': ['212'], '315': ['313'], '422': ['315'], '415': ['330'], '330': ['314'], '425': ['315']}
+prereqs = {'210': [''], '211': ['210'], '212': ['211'], '231': [''], '232': ['231'], '313': ['212', '232'], '314': ['212'], '315': ['313'], '422': ['315'], '415': ['330'], '330': ['314'], '425': ['315'], 'mathseries1': [''], 'mathseries2': ['mathseries1'], 'mathelective1': ['mathseries2'], 'mathelective2': ['mathseries2'], 'writing': [''], 'scienceseries1': [''], 'scienceseries2': ['scienceseries1'], 'scienceseries3': ['scienceseries2']}
 
 class CS:
     #class for the CS major --> holds a DAG of all the required 'core' courses for major
@@ -13,7 +13,10 @@ class CS:
                       "313": ["315"], 
                       "315": ["425", "422"],
                       "314": ["330"], 
-                      "330": ["415"] 
+                      "330": ["415"], 'mathseries1': ['mathseries2'], 
+                      'mathseries2': ['mathelective1', 'mathelective2'],  
+                      'scienceseries1': ['scienceseries2'], 
+                      'scienceseries2': ['scienceseries3'], 'writing': []
                       }
     
     def _get_graph(self):
@@ -51,19 +54,6 @@ class REQPATH:
 #initializing a graph for CS major
 dag = REQPATH("CS")
 
-#simple prompt that asks user for a course they have taken, and removes it from the DAG before enacting top sort
-while True:
-    ask = input("Enter courses taken (N/A if done):")
-    if ask == "N/A":
-        break
-    else:
-        if ask in dag.DAG:
-            dag.DAG.pop(ask)
-
-#top sort enacted:
-topological_order = dag.topological_sort()
-print(topological_order)
-
 #prompts user for how many terms left 
 termsLeft = int(input("How many terms do you have until expected graduation?"))
 
@@ -94,7 +84,7 @@ print("end: ", end)
 #loops through each of the courses in the generated path (what top sort returned)
 try:
     for course in topological_order:
-        
+        print(course)
         #get the list of prereqs for each term
         prereq = prereqs.get(course, [])
 
@@ -131,6 +121,7 @@ try:
         else:
             #once we found a valid term, add the course to corresponding spot in list of terms
             terms[startTerm].append(course)
+        #bug here now with new reqs added --> need to check at end that everything is valid?
         
     print(terms)
 
@@ -138,6 +129,7 @@ except Exception as e:
     #this is for catching index errors--> meaning not enough terms for classes left 
     print("you cannot graduate in that number of terms fool :(")
 
-#now want to populate the terms so that any of the terms after 314 and 313 can have an elective course
-#however, going to limit it for now to only 2 CS courses per term
-#in this alg, assuming all are cs, but once working with database, can check for that
+#to do: 
+#add check at the end, going through each term, restricting number of math and cs courses
+#max 4 courses per term
+#add in to account for cs electives--> not sure how to do this w/o list, maybe where drop-in comes in handy
