@@ -33,7 +33,7 @@ export default function DBTesting() {
                         <li key={index}>
                             <strong>Major:</strong> {classItem.Major}<br />
                             <strong>Class Number:</strong> {classItem.ClassNumber}<br />
-                            <strong>Prerequisite For:</strong> {classItem.PrereqFor}
+                            <strong>Prerequisite For:</strong> {JSON.parse(classItem.PrereqFor).join(', ')}
                         </li>
                     ))}
                 </ul>

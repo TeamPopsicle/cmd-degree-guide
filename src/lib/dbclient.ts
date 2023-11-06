@@ -1,11 +1,11 @@
-export async function sendQuery(queryContent: string) {
+export async function sendQuery(queryContent: string, ...params: any) {
     try {
         const response = await fetch('/api/sendquery', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ content: queryContent }),
+            body: JSON.stringify({ content: queryContent, params }),
         });
 
         if (response.ok) {
