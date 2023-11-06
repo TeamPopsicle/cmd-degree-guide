@@ -1,74 +1,84 @@
-import React from 'react';
-import {useState} from "react";
-import './CourseSelectionPage.module.css'; 
-import { stringify } from 'querystring';
+import React, { useState } from 'react';
+import courses from '@/components/CourseSelectionPage.module.css';
 
 function CourseSelectionPage() {
-  const [selectedButton, setSelectedButton] = useState<string | null>(null);
-
-  const buttonClick = (button: string) => {
-    setSelectedButton(button);
-  }
-
-
+  const [selectedButton, setSelectedButton] = useState<number | null>(null);
+  
+  const handleButtonClick = (buttonIndex: number) => {
+    setSelectedButton(buttonIndex);
+  };
 
   return (
-    <div className="body">
-      <div className="button-container">
-      <button
-          className={`button button-1 ${selectedButton === 'button-1' ? 'selected' : ''}`}
-          onClick={() => buttonClick('button-1')}
+    <div className={courses.body}>
+    <div className= {courses.buttonContainer}>
+      <div className={courses.button}>
+        <div className= {courses.button1}>
+        <button
+          className={`button button1 ${selectedButton === 1 ? 'active' : ''}`}
+          onClick={() => handleButtonClick(1)}
         >
           Computer Science
         </button>
+        </div>
+      </div>
+      <div className={courses.button}>
+      <div className= {courses.button2}>
         <button
-          className={`button button-2 ${selectedButton === 'button-2' ? 'selected' : ''}`}
-          onClick={() => buttonClick('button-2')}
+          className={`button button2 ${selectedButton === 2 ? 'active' : ''}`}
+          onClick={() => handleButtonClick(2)}
         >
           Math
         </button>
+      </div>
+      </div>
+      <div className={courses.button}>
+      <div className= {courses.button3}>
         <button
-          className={`button button-3 ${selectedButton === 'button-3' ? 'selected' : ''}`}
-          onClick={() => buttonClick('button-3')}
+          className={`button button3 ${selectedButton === 3 ? 'active' : ''}`}
+          onClick={() => handleButtonClick(3)}
         >
           Data Science
         </button>
       </div>
-      <div className="table-container">
-        <table>
+      </div>
+      </div>
+      <div className={`${courses.tableContainer} ${selectedButton ? 'active' : ''}`}>
+        <table className={courses.table}>
           <tr>
-            <th>Fall</th>
-            <th>Winter</th>
-            <th>Spring</th>
-            <th>Summer</th>
+            <th className={courses.th}>Fall</th>
+            <th className={courses.th}>Winter</th>
+            <th className={courses.th}>Spring</th>
+            <th className={courses.th}>Summer</th>
+          </tr>
+        
+          <tr>
+            <td className={courses.td}>Data 1</td>
+            <td className={courses.td}>Data 2</td>
+            <td className={courses.td}>Data 3</td>
+            <td className={courses.td}>Data 4</td>
           </tr>
           <tr>
-            <td>Data 1</td>
-            <td>Data 2</td>
-            <td>Data 3</td>
-            <td>Data 4</td>
+            <td className={courses.td}>Data 5</td>
+            <td className={courses.td}>Data 6</td>
+            <td className={courses.td}>Data 7</td>
+            <td className={courses.td}>Data 8</td>
           </tr>
           <tr>
-            <td>Data 5</td>
-            <td>Data 6</td>
-            <td>Data 7</td>
-            <td>Data 8</td>
+            <td className={courses.td}>Data 9</td>
+            <td className={courses.td}>Data 10</td>
+            <td className={courses.td}>Data 11</td>
+            <td className={courses.td}>Data 12</td>
           </tr>
           <tr>
-            <td>Data 9</td>
-            <td>Data 10</td>
-            <td>Data 11</td>
-            <td>Data 12</td>
-          </tr>
-          <tr>
-            <td>Data 13</td>
-            <td>Data 14</td>
-            <td>Data 15</td>
-            <td>Data 16</td>
+            <td className={courses.td}>Data 13</td>
+            <td className={courses.td}>Data 14</td>
+            <td className={courses.td}>Data 15</td>
+            <td className={courses.td}>Data 16</td>
           </tr>
         </table>
       </div>
     </div>
+ 
   );
 }
 
