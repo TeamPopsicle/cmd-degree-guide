@@ -113,14 +113,18 @@ try:
             #this is only important if we have multiple prereqs, we set CT = ST, since we know ST is the valid term for first prereq, we dont have to start at beginning of list, start at this term
             currentTerm = startTerm
 
-        #this checks that there aren't more than 2 cs courses per term
-        #could see a potential future bug in that it adds to next list, not checking that lists length
-        if len(terms[startTerm]) >= 2:
-            #once we found a valid term, add the course to corresponding spot in list of terms
-            terms[startTerm + 1].append(course)
+        #this checks to make sure all terms are limited to 4 classes 
+        if len(terms[startTerm]) >= 4:
+            index = 1
+            while True:
+                if len(terms[startTerm + index]) < 4:
+                    terms[startTerm + index].append(course)
+                    break
+                else:
+                    index += 1
         else:
-            #once we found a valid term, add the course to corresponding spot in list of terms
             terms[startTerm].append(course)
+            
         #bug here now with new reqs added --> need to check at end that everything is valid?
         
     print(terms)
