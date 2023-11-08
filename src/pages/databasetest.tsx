@@ -31,6 +31,7 @@ export default function DBTesting() {
                 <ul>
                     {classes.map((classItem, index) => (
                         <li key={index}>
+                            <br />
                             <strong>Major:</strong> {classItem.Major}<br />
                             <strong>Class Number:</strong> {classItem.ClassNumber}<br />
                             <strong>Prerequisite For:</strong> {JSON.parse(classItem.PrereqFor).join(', ')}
