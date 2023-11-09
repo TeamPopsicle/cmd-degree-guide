@@ -1,6 +1,5 @@
-#prereq storage for now:
-#less expensive than using the dag and looking for prereqs due to its structure
-prereqs = {'210': [''], '211': ['210'], '212': ['211'], '231': [''], '232': ['231'], '313': ['212', '232'], '314': ['212'], '315': ['313'], '422': ['315'], '415': ['330'], '330': ['314'], '425': ['315'], 'mathseries1': [''], 'mathseries2': ['mathseries1'], 'mathelective1': ['mathseries2'], 'mathelective2': ['mathseries2'], 'writing': [''], 'scienceseries1': [''], 'scienceseries2': ['scienceseries1'], 'scienceseries3': ['scienceseries2']}
+#old way of accessing prereqs:
+#prereqs = {'210': [''], '211': ['210'], '212': ['211'], '231': [''], '232': ['231'], '313': ['212', '232'], '314': ['212'], '315': ['313'], '422': ['315'], '415': ['330'], '330': ['314'], '425': ['315'], 'mathseries1': [''], 'mathseries2': ['mathseries1'], 'mathelective1': ['mathseries2'], 'mathelective2': ['mathseries2'], 'writing': [''], 'scienceseries1': [''], 'scienceseries2': ['scienceseries1'], 'scienceseries3': ['scienceseries2']}
 
 class CS:
     #class for the CS major --> holds a DAG of all the required 'core' courses for major
@@ -23,6 +22,31 @@ class CS:
         #helper function returning the graph
         return self.graph
     
+    def _get_prereq(self):
+        #new way of accessing prereqs --> generates a dict based on the DAG
+        #logic: reverse the keys and vals of the DAG and then add in any classes with no prereqs at the end
+        prereqs = {}
+
+        #list of DAG keys"
+        k = list(self.graph.keys())
+
+        #reverses the DAG dictionary
+        for key, val in self.graph.items():
+            for vals in val:
+                prereqs.setdefault(vals, []).append(key)
+
+        #list of reverse dicts keys:
+        reverseKeys = list(prereqs.keys())
+
+        #if key from DAG is not in prereq dict, then it has no prereqs, add it in w/ this value: ['']
+        for x in k: 
+            if x not in reverseKeys:
+                prereqs[x] = ['']
+            else:
+                continue
+
+        return prereqs
+    
 class REQPATH:
     #class for getting a valid path depending on the dag given by the chosen major
     def __init__(self, major):
@@ -30,8 +54,10 @@ class REQPATH:
         if major == "CS":
             m = CS()
             self.DAG = m._get_graph()
+            self.prereq = m._get_prereq()
         else:
             self.DAG = {}
+            self.prereq = {}
     
     def topological_sort(self):
         #topologically sorts DAG using recursion; looks at each node and then uses visit to check the children nodes
@@ -68,26 +94,27 @@ while True:
 
 #top sort enacted:
 topological_order = dag.topological_sort()
-print(topological_order)
+#print(topological_order)
 
 #is there more efficient way to do this? dont rlly remember?
 terms = []
 for i in range(termsLeft):
     terms.append([])
-print(terms)
 
 
 #keeps track of the 'end' of the list of terms (usefull for sorting alg)
 end = len(terms) - 1
-print("end: ", end)
+
+#retrieving the dict of prereqs
+prereqs = dag.prereq
 
 #loops through each of the courses in the generated path (what top sort returned)
 try:
     for course in topological_order:
-        print(course)
+
         #get the list of prereqs for each term
         prereq = prereqs.get(course, [])
-
+        
         #startTerm is going to hold the 'first' valid term
         #currentTerm lets us iterate through all of the terms, checking for prereqs in each one
         startTerm = 0
@@ -124,10 +151,41 @@ try:
                     index += 1
         else:
             terms[startTerm].append(course)
-            
         #bug here now with new reqs added --> need to check at end that everything is valid?
         
+
+    #once we have a system for prereqs for cs elective, won't have to worry about the below alg:
+
+    #cs elective system (for now) --> need 5 classes, 3 above 410
+    #can't take these until pass 212, might even be higher
+    electiveAbove = ['electiveAbove410', 'electiveAbove410', 'electiveAbove410']
+    electiveBelow = ['electiveBelow410', 'electiveBelow410']
+    idx = 0
+    for x in terms: 
+        if '212' in x:
+            break
+        else:
+            idx += 1
+    
+    start = idx + 1
+    while True:
+        if len(terms[start]) < 4:
+            if electiveBelow != []:
+                terms[start].append(electiveBelow[0])
+                electiveBelow.remove('electiveBelow410')
+            elif electiveAbove != []:
+                terms[start].append(electiveAbove[0])
+                electiveAbove.remove('electiveAbove410')
+            else:
+                break
+        else:
+            start += 1
+                   
     print(terms)
+
+
+#max 2 cs courses 
+#max 1 math courses
 
 except Exception as e:
     #this is for catching index errors--> meaning not enough terms for classes left 
@@ -137,3 +195,9 @@ except Exception as e:
 #add check at the end, going through each term, restricting number of math and cs courses
 #max 4 courses per term
 #add in to account for cs electives--> not sure how to do this w/o list, maybe where drop-in comes in handy
+
+#figure out prerequisite system for cs electives (drop down here so tricky)
+#figure out how to limit and what to limit in terms of course type or difficulty
+    #for example, maybe make only one 300 level and 400 level per term OR 2 CS and 1 MA per term
+
+#turn dag into list of prereqs! --> done
