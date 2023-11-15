@@ -101,7 +101,7 @@ class REQPATH {
     }
 }
 
-function runGenAlg() {
+export function runGenAlg(termsLeft: number, coursesTaken: string) {
     const dag = new REQPATH("CS");
 
     /*
@@ -120,7 +120,6 @@ function runGenAlg() {
             if ask in dag.DAG:
                 dag.DAG.pop(ask)
     */
-    const termsLeft = 12
 
 
     const topologicalOrder = dag.topologicalSort();
@@ -187,13 +186,12 @@ function runGenAlg() {
                 terms[startTerm].push(course);
             }
         }
-        console.log(JSON.stringify(terms));
+        return JSON.stringify(terms);
     }
     catch (e) {
         // This is for catching errors, such as index errors, meaning not enough terms for classes left
-        console.log("You cannot graduate in that number of terms :(");
-        console.log(e);
+        console.error("You cannot graduate in that number of terms :(");
+        console.error(e);
+        return "";
     }
 }
-
-runGenAlg();
