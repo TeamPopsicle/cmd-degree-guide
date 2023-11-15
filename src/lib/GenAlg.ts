@@ -1,6 +1,7 @@
 class CS {
     private graph: Record<string, string[]>;
     // Class for the CS major --> holds a DAG of all the required 'core' courses for major
+    // TODO: Change this to get from database rather than hardcoded data
     constructor() {
         this.graph =
         {
@@ -29,7 +30,7 @@ class CS {
     _getPrereq() {
         // New way of accessing prereqs --> generates a dict based on the DAG
         // Logic: reverse the keys and vals of the DAG and then add in any classes with no prereqs at the end
-        let prereqs: Record<string, string[]> = {};
+        const prereqs: Record<string, string[]> = {};
 
         // List of DAG keys
         const k: string[] = Object.keys(this.graph);
@@ -120,7 +121,12 @@ export function runGenAlg(termsLeft: number, coursesTaken: string) {
             if ask in dag.DAG:
                 dag.DAG.pop(ask)
     */
-
+    const coursesTakenList = coursesTaken.split(" ");
+    for (const course of coursesTakenList) {
+        if (dag.DAG[course]) {
+            delete dag.DAG[course]
+        }
+    }
 
     const topologicalOrder = dag.topologicalSort();
     //console.log(dag.topologicalSort());

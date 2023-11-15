@@ -25,8 +25,10 @@ export default function UserInput() {
                 How many terms do you have until expected graduation?
                 <input
                     type="number"
-                    value={termsLeft}
-                    onChange={e => setTermsLeft(Number(e.target.value))}
+                    onChange={e => {
+                        const inputValue = e.target.value;
+                        setTermsLeft(inputValue === '' ? 0 : Number(inputValue));
+                    }}
                     required
                 />
             </label>
