@@ -20,7 +20,7 @@ export default function Signup() {
                 const registerUserContent = "INSERT INTO `cmd_degree_guide`.`Users` (`username`, `password`) VALUES (?, ?)";
                 const registerResponseObject = await sendQuery(registerUserContent, username, password);
                 if (registerResponseObject) {
-                    saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
+                    saveToLocalStorage("loggedInUser", username);
                     setRegistrationMessage("New account created successfully! Redirecting in 3 seconds...");
                     // Wait 3 seconds, then redirect
                     setTimeout(() => {
