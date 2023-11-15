@@ -3,6 +3,7 @@ import Form from "@/components/Form";
 import { sendQuery } from "@/lib/dbclient";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { saveToLocalStorage } from "@/lib/LocalStorage";
 
 export default function Signup() { 
     const [registrationMessage, setRegistrationMessage] = useState("");
@@ -11,18 +12,19 @@ export default function Signup() {
     async function handleLogin(username: string, password: string) {
         if (username.length > 0 && password.length > 0){
             // Check if user already exists
-            const existingUserCheckContent = "SELECT * FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;"
-            const existingUserCheckResponseObject = await sendQuery(existingUserCheckContent, username);
+            const existingUserCheckQuery = "SELECT * FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;"
+            const existingUserResponseObject = await sendQuery(existingUserCheckQuery, username);
 
-            if (existingUserCheckResponseObject.response.length === 0) {
+            if (existingUserResponseObject.response.length === 0) {
                 // User doesn't exist, register
                 const registerUserContent = "INSERT INTO `cmd_degree_guide`.`Users` (`username`, `password`) VALUES (?, ?)";
                 const registerResponseObject = await sendQuery(registerUserContent, username, password);
                 if (registerResponseObject) {
+                    saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
                     setRegistrationMessage("New account created successfully! Redirecting in 3 seconds...");
                     // Wait 3 seconds, then redirect
                     setTimeout(() => {
-                        router.push("/courseselection");
+                        router.push("/input");
                     }, 3000)
                 }
             } else {

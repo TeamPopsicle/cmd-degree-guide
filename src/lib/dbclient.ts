@@ -1,3 +1,9 @@
+/**
+ * Asynchronously sends a query to the database by sending an API call to itself
+ * @param queryContent The SQL query to send it
+ * @param params Placeholder parameters for the SQL query
+ * @returns A JSON object containing the API response, which contains another object of the SQL response
+ */
 export async function sendQuery(queryContent: string, ...params: any) {
     try {
         const response = await fetch('/api/sendquery', {

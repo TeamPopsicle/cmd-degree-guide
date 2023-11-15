@@ -19,11 +19,11 @@ export default function Login() {
             if (existingUserResponseObject.response.length > 0
                 && existingUserResponseObject.response[0].password === password) {
                 // User exists, login
-                saveToLocalStorage("loggedInUser", existingUserResponseObject[0].username);
+                saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
                 setLoginMessage("Log in success! Redirecting in 3 seconds...");
                 // Wait 3 seconds, then redirect
                 setTimeout(() => {
-                    router.push("/courseselection");
+                    router.push("/input");
                 }, 3000)
             } else {
                 // Username and password are incorrect, stop
