@@ -127,7 +127,7 @@ function runGenAlg() {
     //console.log(dag.topologicalSort());
 
     //setting list of terms with each list being a term itself
-    const terms = [];
+    const terms: Array<string[]> = [];
     for (let i = 0; i < termsLeft; i++) {
         terms.push([]);
     }
