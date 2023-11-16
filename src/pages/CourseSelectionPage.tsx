@@ -1,84 +1,106 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import courses from '@/components/CourseSelectionPage.module.css';
+import { getLocalStorage } from '@/lib/LocalStorage';
+import React from 'react';
 
 function CourseSelectionPage() {
   const [selectedButton, setSelectedButton] = useState<number | null>(null);
-  
+  const [parsedTerms, setParsedTerms] = useState<Array<string[]>>([]);
+
+  useEffect(() => {
+    // Fetch and parse the terms data on the client side
+    const terms = getLocalStorage('schedule');
+    const parsedTerms = terms ? JSON.parse(terms) : [];
+    setParsedTerms(parsedTerms);
+  }, []);
+
   const handleButtonClick = (buttonIndex: number) => {
     setSelectedButton(buttonIndex);
   };
 
+  function TermTable({ parsedTerms }: { parsedTerms: string[][] }) {
+    // Ensure parsedTerms has at least 12 elements
+    const filledParsedTerms: Array<string[]> = [...parsedTerms, ...Array(12 - parsedTerms.length).fill([])];
+
+    return (
+      <tbody>
+        {
+          /**
+           * Sets up the structure a 3D array for all 4 years 
+           * Starts by creating a sliced array from parsed terms containing 1 year (3 terms)
+           * This repeats 4 times, 1 for each year
+           * Each iteration returns the row for that year as a <tr>
+           * The overall resulting array follows the structure of a 3D array, like Plan[year[term[class]]]
+           */
+          Array.from({ length: 4 }, (_, yearIndex) => {
+            const slicedArray = filledParsedTerms.slice(yearIndex * 3, (yearIndex + 1) * 3);
+
+            return (
+              <tr key={yearIndex}>
+                {slicedArray.map((term, termIndex) => (
+                  <td key={termIndex}>
+                    {term.map((className, index) => (
+                      <React.Fragment key={index}>
+                        <p>{className}</p>
+                      </React.Fragment>
+                    ))}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+      </tbody>
+    );
+  }
+
   return (
     <div className={courses.body}>
-    <div className= {courses.buttonContainer}>
-      <div className={courses.button}>
-        <div className= {courses.button1}>
-        <button
-          className={`button button1 ${selectedButton === 1 ? 'active' : ''}`}
-          onClick={() => handleButtonClick(1)}
-        >
-          Computer Science
-        </button>
+      <div className={courses.buttonContainer}>
+        <div className={courses.button}>
+          <div className={courses.button1}>
+            <button
+              className={`button button1 ${selectedButton === 1 ? 'active' : ''}`}
+              onClick={() => handleButtonClick(1)}
+            >
+              Computer Science
+            </button>
+          </div>
         </div>
-      </div>
-      <div className={courses.button}>
-      <div className= {courses.button2}>
-        <button
-          className={`button button2 ${selectedButton === 2 ? 'active' : ''}`}
-          onClick={() => handleButtonClick(2)}
-        >
-          Math
-        </button>
-      </div>
-      </div>
-      <div className={courses.button}>
-      <div className= {courses.button3}>
-        <button
-          className={`button button3 ${selectedButton === 3 ? 'active' : ''}`}
-          onClick={() => handleButtonClick(3)}
-        >
-          Data Science
-        </button>
-      </div>
-      </div>
+        <div className={courses.button}>
+          <div className={courses.button2}>
+            <button
+              className={`button button2 ${selectedButton === 2 ? 'active' : ''}`}
+              onClick={() => handleButtonClick(2)}
+            >
+              Math
+            </button>
+          </div>
+        </div>
+        <div className={courses.button}>
+          <div className={courses.button3}>
+            <button
+              className={`button button3 ${selectedButton === 3 ? 'active' : ''}`}
+              onClick={() => handleButtonClick(3)}
+            >
+              Data Science
+            </button>
+          </div>
+        </div>
       </div>
       <div className={`${courses.tableContainer} ${selectedButton ? 'active' : ''}`}>
         <table className={courses.table}>
-          <tr>
-            <th className={courses.th}>Fall</th>
-            <th className={courses.th}>Winter</th>
-            <th className={courses.th}>Spring</th>
-            <th className={courses.th}>Summer</th>
-          </tr>
-        
-          <tr>
-            <td className={courses.td}>Data 1</td>
-            <td className={courses.td}>Data 2</td>
-            <td className={courses.td}>Data 3</td>
-            <td className={courses.td}>Data 4</td>
-          </tr>
-          <tr>
-            <td className={courses.td}>Data 5</td>
-            <td className={courses.td}>Data 6</td>
-            <td className={courses.td}>Data 7</td>
-            <td className={courses.td}>Data 8</td>
-          </tr>
-          <tr>
-            <td className={courses.td}>Data 9</td>
-            <td className={courses.td}>Data 10</td>
-            <td className={courses.td}>Data 11</td>
-            <td className={courses.td}>Data 12</td>
-          </tr>
-          <tr>
-            <td className={courses.td}>Data 13</td>
-            <td className={courses.td}>Data 14</td>
-            <td className={courses.td}>Data 15</td>
-            <td className={courses.td}>Data 16</td>
-          </tr>
+          <thead>
+            <tr>
+              <th className={courses.th}>Fall</th>
+              <th className={courses.th}>Winter</th>
+              <th className={courses.th}>Spring</th>
+            </tr>
+          </thead>
+          <TermTable parsedTerms={parsedTerms} />
         </table>
       </div>
-    </div>
- 
+    </div >
+
   );
 }
 

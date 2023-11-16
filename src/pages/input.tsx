@@ -8,8 +8,13 @@ export default function UserInput() {
     const [coursesTaken, setCoursesTaken] = useState("");
     const router = useRouter();
 
+    // TODO: Check to make sure user is logged in, redirect back to login if not on open.
+    // Proposal: Use useEffect()
+
     function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
+        // TODO: Also save to User Database
+        // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails
         saveToLocalStorage("schedule", runGenAlg(termsLeft, coursesTaken));
         router.push("/CourseSelectionPage");
     }
