@@ -49,17 +49,17 @@
   }
 
   .button1:hover, .button1.active{
-    background-color: #0070f3; /* Set button background color on hover/click */
+    background-color: rgb(120, 178, 245); /* Set button background color on hover/click */
     color:#fff;
   }
 
   .button2:hover, .button2.active{
-    background-color: #6f42c1; /* Set button background color on hover/click */
+    background-color: rgb(180, 152, 231); /* Set button background color on hover/click */
     color:#fff;
   }
 
   .button3:hover, .button3.active{
-    background-color: #dc2626; /* Set button background color on hover/click */
+    background-color: #ee9494; /* Set button background color on hover/click */
     color:#fff;
   }
   
@@ -79,6 +79,19 @@
     border: 1px solid #333;
     background-color: #fff; /* Set background color for the table */
   }
+
+  .CourseSelectionPage_tableContainer__8GMTu.table3{
+    background-color: #ee9494 !important;
+  }
+
+  .tableContainer.table.table1{
+    background-color: rgb(120, 178, 245);
+  }
+
+  .tableContainer.table.table2{
+    background-color: rgb(180, 152, 231); 
+  }
+
 
   .th {
     padding: 10px;

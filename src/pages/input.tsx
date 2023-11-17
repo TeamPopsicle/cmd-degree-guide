@@ -25,9 +25,19 @@ export default function UserInput() {
             e.preventDefault();
             handleSubmit();
         }}
+        style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+            backgroundColor: "#fbf4cf", // Set the background color for the entire webpage
+            padding: "20px", // Add some padding to the form
+        }}
         >
-            <label>
+            <label style={{ marginBottom: "10px", color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
                 How many terms do you have until expected graduation?
+                <br />
                 <input
                     type="number"
                     onChange={e => {
@@ -35,18 +45,50 @@ export default function UserInput() {
                         setTermsLeft(inputValue === '' ? 0 : Number(inputValue));
                     }}
                     required
+                    style={{
+                        border: "2px solid darkgreen", // Set green color outline for the input box
+                        borderRadius: "10px", // Add some border radius for a rounded look
+                        padding: "8px", // Add padding for better visual appeal
+                        marginTop: "5px", // Add margin to separate from the label
+                        
+                    }}
                 />
             </label>
 
-            <label>
-                Enter courses taken, each separated by space
+            <label style={{ marginBottom: "10px", color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
+                Enter courses taken, each separated by space:
+                <br />
                 <input
                     type="text"
                     value={coursesTaken}
                     onChange={e => setCoursesTaken(e.target.value)}
+                     style={{
+                        border: "2px solid darkgreen", // Set the same color as the text
+                        borderRadius: "10px",
+                        padding: "8px",
+                        marginTop: "5px", // Add margin to separate from the label
+                    }}
                 />
             </label>
-            <button type="submit">Submit</button>
+            <button type="submit"
+             style={{
+                backgroundColor: "darkgreen",
+                color: "#fbf4cf",
+                padding: "10px 20px",
+                fontSize: "20px",
+                border: "none",
+                borderRadius: "20px",
+                cursor: "pointer",
+                marginTop: "15px",
+                transition: "background-color 0.3s", // Add transition effect on hover
+            }}
+            onMouseOver={(e) => {
+                (e.target as HTMLElement).style.backgroundColor = "green"; // Change background color on hover
+            }}
+            onMouseOut={(e) => {
+                (e.target as HTMLElement).style.backgroundColor = "darkgreen"; // Revert back to the original color on mouse out
+            }}
+        >Submit</button>
         </form>
     );
 }
