@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import courses from '@/components/CourseSelectionPage.module.css';
+import courses from '@/styles/CourseSelectionPage.module.css';
 import { getLocalStorage } from '@/lib/LocalStorage';
 import React from 'react';
 
