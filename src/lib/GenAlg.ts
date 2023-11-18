@@ -103,25 +103,73 @@ class REQPATH {
     }
 }
 
-export function runGenAlg(termsLeft: number, coursesTaken: string) {
+function sortIntoTerms(topOrder, termNum, preReqDict, maxReqsPerTerm)
+{
+    //setting list of terms with each list being a term itself
+    const terms: Array<string[]> = [];
+    for (let i = 0; i < termNum; i++) {
+        terms.push([]);
+    }
+    //keeps track of 'end' of the list of terms
+    const end = terms.length - 1;
+
+    for (const course of topOrder) {
+        // Get the list of prereqs for each term
+        const prereq = preReqDict[course] || [];
+
+        // startTerm is going to hold the 'first' valid term
+        // currentTerm lets us iterate through all of the terms, checking for prereqs in each one
+        let startTerm = 0;
+        let currentTerm = 0;
+
+        // Loop usually runs only once, but necessary for courses with multiple prereqs
+        for (const p of prereq) {
+            // Algorithm for getting a valid term (no prereqs in that term or future terms) to store the current course
+            while (true) {
+                // If currentTerm is at the end of the list, break out of the loop (looked at all terms)
+                if (currentTerm > end) {
+                    break;
+                }
+                // If the prereq is in the current term, increase currentTerm and set startTerm = currentTerm (term after the term with the prereq)
+                if (terms[currentTerm].includes(p)) {
+                    currentTerm += 1;
+                    startTerm = currentTerm;
+                }
+                // If the prereq isn't in the current term, iterate through to the next term
+                else {
+                    currentTerm += 1;
+                }
+            }
+            // This is only important if we have multiple prereqs, we set currentTerm = startTerm,
+            // since we know startTerm is the valid term for the first prereq, we don't have to start at the beginning of the list, start at this term
+            currentTerm = startTerm;
+        }
+        // This checks to make sure all terms are limited to 4 classes
+        if (terms[startTerm].length >= maxReqsPerTerm) {
+            let index = 1;
+            while (true) {
+                if (terms[startTerm + index].length < maxReqsPerTerm) {
+                    terms[startTerm + index].push(course);
+                    break;
+                }
+                else {
+                    index += 1;
+                }
+            }
+        }
+        else {
+            terms[startTerm].push(course);
+        }
+    }
+    //return JSON.stringify(terms);
+    return terms;
+
+}
+
+export function runGenAlg(termsLeft: number, coursesTaken: string) 
+{
     const dag = new REQPATH("CS");
 
-    /*
-    this is the input part still written in python, for the sake of changing to javascript
-    I am just going to set these values as default/remove no classes, etc.
-    
-    #prompts user for how many terms left 
-    termsLeft = int(input("How many terms do you have until expected graduation?"))
-    
-    #simple prompt that asks user for a course they have taken, and removes it from the DAG before enacting top sort
-    while True:
-        ask = input("Enter courses taken (N/A if done):")
-        if ask == "N/A":
-            break
-        else:
-            if ask in dag.DAG:
-                dag.DAG.pop(ask)
-    */
     const coursesTakenList = coursesTaken.split(" ");
     for (const course of coursesTakenList) {
         if (dag.DAG[course]) {
@@ -133,18 +181,59 @@ export function runGenAlg(termsLeft: number, coursesTaken: string) {
     //console.log(dag.topologicalSort());
 
     //setting list of terms with each list being a term itself
-    const terms: Array<string[]> = [];
+    /*const terms: Array<string[]> = [];
     for (let i = 0; i < termsLeft; i++) {
         terms.push([]);
     }
     //keeps track of 'end' of the list of terms
-    const end = terms.length - 1;
+    const end = terms.length - 1;*/
 
     //prereq dict:
     const prereqs = dag.prereq;
     //console.log(JSON.stringify(prereqs));
+    let maxReqsPerTerm = 2;
+    let schedule = null;
+    let errorCount = 0;
 
-    try {
+    //using a while loop to account for overloading, adjusting based on how many terms left
+    while(maxReqsPerTerm <= 4)
+    {
+        //using function to sort into terms, testing for errors
+        try
+        {
+            schedule = sortIntoTerms(topologicalOrder, termsLeft, prereqs, maxReqsPerTerm);
+            break;
+        }
+        catch
+        {
+            if (errorCount < 2)
+            {
+                maxReqsPerTerm += 1;
+                errorCount += 1;
+                continue;
+            }
+            else
+            {
+                schedule = "No"
+                break;
+            }
+        }
+    }
+
+    if (schedule == "No")
+    {
+        //display console error
+        console.error("You cannot graduate in that number of terms :(");
+        return "";
+    }
+    else
+    {
+        //return results
+        return JSON.stringify(schedule);
+    }
+
+    //old code for reference:
+    /*try {
         for (const course of topologicalOrder) {
             // Get the list of prereqs for each term
             const prereq = prereqs[course] || [];
@@ -200,5 +289,5 @@ export function runGenAlg(termsLeft: number, coursesTaken: string) {
         console.error("You cannot graduate in that number of terms :(");
         console.error(e);
         return "";
-    }
+    }*/
 }
