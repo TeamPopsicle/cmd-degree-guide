@@ -5,7 +5,7 @@ import React from "react";
 
 function CourseSelectionPage() {
   const [selectedButton, setSelectedButton] = useState<number | null>(null);
-  const [tableColor, setTableColor] = useState<number | null>(null);
+  const [tableColor, setTableColor] = useState<string | string>('#ffffff');
   const [parsedTerms, setParsedTerms] = useState<Array<string[]>>([]);
 
   useEffect(() => {
@@ -16,7 +16,14 @@ function CourseSelectionPage() {
   }, []);
 
   const handleButtonClick = (buttonIndex: number) => {
-    setTableColor(buttonIndex);
+    let csColor = 'rgb(182, 207, 235)';
+    let mathColor = 'rgb(215, 201, 242)';
+    let dsColor = 'rgb(219, 186, 186)';
+
+    if (buttonIndex === 1) setTableColor(csColor);
+    if (buttonIndex === 2) setTableColor(mathColor);
+    if (buttonIndex === 3) setTableColor(dsColor);
+
     setSelectedButton(buttonIndex);
   };
 
@@ -105,7 +112,8 @@ function CourseSelectionPage() {
         }`}
       >
         <table
-          className={`${courses.table} ${tableColor && "table" + tableColor}`}
+          className={`${courses.table}`}
+          style={{ backgroundColor: tableColor }}
         >
           <thead>
             <tr>
