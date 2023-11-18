@@ -11,16 +11,21 @@ class CS {
             "212": ["313", "314"],
             "231": ["232"],
             "232": ["313"],
-            "313": ["315"],
-            "315": ["425", "422"],
-            "314": ["330"],
-            "330": ["415"],
+            "313": ["315", "csElectiveAbove300_1", "csElectiveAbove300_2"],
+            "315": ["425", "422", "csElectiveAbove410_1", "csElectiveAbove410_2", "csElectiveAbove410_3"],
+            "314": ["330", "csElectiveAbove300_1", "csElectiveAbove300_2"],
+            "330": ["415", "csElectiveAbove410_1", "csElectiveAbove410_2", "csElectiveAbove410_3"],
             "mathseries1": ["mathseries2"],
             "mathseries2": ["mathelective1", "mathelective2"],
             "scienceseries1": ["scienceseries2"],
             "scienceseries2": ["scienceseries3"],
             "writing": [],
-        };
+            "csElectiveAbove410_1": [],
+            "csElectiveAbove410_2": [],
+            "csElectiveAbove410_3": [],
+            "csElectiveAbove300_1": [],
+            "csElectiveAbove300_2": []
+          };
     }
 
     _getGraph() {
