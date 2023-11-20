@@ -7,9 +7,7 @@ import Link from 'next/link';
 /* Redesigned the navbar as a set of page links. Currently they link to blank pages. 
 
     TODO: 
-        - Write About page 
-        - Write contact info 
-        - Fix Navbar styles */ 
+        - Style navbar */ 
 
 /* 
 type Props = {

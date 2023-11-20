@@ -20,6 +20,11 @@ body {
   font-family: "DM Sans", sans-serif;
 }
 
+Navbar { 
+  color: green; 
+  padding: 20px; /* these don't work */ 
+}
+
 h1 {
   font-size: 200%;
   text-align: center;
@@ -28,6 +33,11 @@ h1 {
   color: green;
   display: block;
   margin: 5% auto 0% auto;
+}
+
+p { 
+  margin: 2px 50px 10px 50px; 
+  color: rgb(9, 66, 36);
 }
 
 .submitButton {  
@@ -94,11 +104,6 @@ input {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.19), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-/* I moved the table styles into here to resolve a conflict.  
-Modules can't use "pure" selectors, so if we want to put these in the course selection CSS
-module, we will have to add a class name to every table, th, and td element. Since we should
-only be using the table in one place, and it will only ever need to have one set of styles, it
-should be sufficient to just keep it here. -H */ 
 
 table {
   border-collapse: collapse;

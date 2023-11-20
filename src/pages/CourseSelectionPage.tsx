@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar/Navbar";
 import courses from "@/styles/CourseSelectionPage.module.css";
 import { getLocalStorage } from "@/lib/LocalStorage";
 import React from "react";
@@ -70,6 +71,8 @@ function CourseSelectionPage() {
   }
 
   return (
+    <>
+    <Navbar /> 
     <div className={courses.body}>
       <div className={courses.buttonContainer}>
         <div className={courses.button}>
@@ -126,6 +129,7 @@ function CourseSelectionPage() {
         </table>
       </div>
     </div>
+    </>
   );
 }
 

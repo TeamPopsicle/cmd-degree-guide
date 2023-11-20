@@ -11,6 +11,7 @@ export default function UserInput() {
 
     // TODO: Check to make sure user is logged in, redirect back to login if not on open.
     // Proposal: Use useEffect()
+    // FIX ME: Need a different way to delimit the courses input by the user. Commas instead? 
 
     function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
@@ -40,7 +41,7 @@ export default function UserInput() {
         }}
         >
             <label style={{ marginBottom: "10px", color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
-                How many terms do you have until expected graduation?
+                How many terms do you have until expected graduation? (max 12) 
                 <br />
                 <input
                     type="number"
