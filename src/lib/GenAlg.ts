@@ -1,48 +1,107 @@
-class CS {
-    private graph: Record<string, string[]>;
+class MAJOR {
+    private graphCS: Record<string, string[]>;
+    private graphDS: Record<string, string[]>;
+    private graphMA: Record<string, string[]>;
     // Class for the CS major --> holds a DAG of all the required 'core' courses for major
     // TODO: Change this to get from database rather than hardcoded data
     // TODO: Update database with series classes
     constructor() {
-        this.graph =
+        this.graphCS =
         {
-            "210": ["211"],
-            "211": ["212"],
-            "212": ["313", "314"],
-            "231": ["232"],
-            "232": ["313"],
-            "313": ["315", "csElectiveAbove300_1", "csElectiveAbove300_2"],
-            "315": ["425", "422", "csElectiveAbove410_1", "csElectiveAbove410_2", "csElectiveAbove410_3"],
-            "314": ["330", "csElectiveAbove300_1", "csElectiveAbove300_2"],
-            "330": ["415", "csElectiveAbove410_1", "csElectiveAbove410_2", "csElectiveAbove410_3"],
+            "CS210": ["CS211"],
+            "CS211": ["CS212"],
+            "CS212": ["CS313", "CS314"],
+            "MA231": ["MA232"],
+            "MA232": ["CS313"],
+            "CS313": ["CS315", "csElectiveAbove300_1", "csElectiveAbove300_2"],
+            "CS315": ["CS425", "CS422", "csElectiveAbove410_1"],
+            "CS314": ["CS330", "csElectiveAbove300_1", "csElectiveAbove300_2"],
+            "CS330": ["CS415", "csElectiveAbove410_1"],
             "mathseries1": ["mathseries2"],
             "mathseries2": ["mathelective1", "mathelective2"],
             "scienceseries1": ["scienceseries2"],
             "scienceseries2": ["scienceseries3"],
             "writing": [],
-            "csElectiveAbove410_1": [],
-            "csElectiveAbove410_2": [],
-            "csElectiveAbove410_3": [],
+            "csElectiveAbove410_1": ["csElectiveAbove410_2", "csElectiveAbove410_3"],
             "csElectiveAbove300_1": [],
             "csElectiveAbove300_2": []
           };
+          this.graphDS = 
+          {
+            "DSCI101": ["DSCI102"],
+            "DSCI102": ["DSCI311", "DSCI345"],
+            "DSCI345": ["DSCI372"],
+            "CS210": ["CS211"],
+            "CS211": ["CS212", "DSCI311", "DSCI345"],
+            "CS212": ["DSCI372"],
+            "MA251": ["MA252"],
+            "MA341": ["MA342"],
+            "MA342": ["DSCI311", "DSCI345"],
+            "PH223": [],
+            "ComputationalAndInferentialDepth1": ["ComputationalAndInferentialDepth2"],
+            "ComputationalAndInferentialDepth2": ["ComputationalAndInferentialDepth3"],
+            "DomainCore1": ["DomainCore2"],
+            "DomainCore2": ["DomainElective1"],
+            "DomainElective1": ["DomainElective2", "DomainElective3", "DomainElective4"]
+          };
+          this.graphMA = 
+          {
+            "MA251": ["MA252"],
+            "MA252": ["MA253", "bridgeRequirement1","MA341"],
+            "MA253": ["MA281","MA316"],
+            "MA281": ["MA282"],
+            "MA341": ["MA342", "MA391"],
+            "MA391": ["MA392"],
+            "MA316": ["MA317"],
+            "bridgeRequirement1": ["bridgeRequirement2"],
+            "bridgeRequirement2": ["MathLab1"],
+            "MathLab1": ["MathLab2"],
+            "MathLab2": ["UpperDivisionMathElective1", "UpperDivisionMathElective2", "UpperDivSeq1"],
+            "UpperDivisionMathElective1": [],
+            "UpperDivisionMathElective2": [],
+            "UpperDivSeq1": ["UpperDivSeq2"],
+            "AnyCS": []
+            };
     }
 
-    _getGraph() {
+    _getGraphCS() {
         // Helper function returning the graph
-        return this.graph;
+        return this.graphCS;
+    }
+    _getGraphDS()
+    {
+      return this.graphDS;
+    }
+    _getGraphMA()
+    {
+      return this.graphMA;
     }
 
-    _getPrereq() {
+    _getPrereq(major) {
         // New way of accessing prereqs --> generates a dict based on the DAG
         // Logic: reverse the keys and vals of the DAG and then add in any classes with no prereqs at the end
         const prereqs: Record<string, string[]> = {};
+        let graph = {};
+
+        if (major == "CS")
+        {
+          graph = this.graphCS;
+          //console.log(major);
+        }
+        if (major == "DS")
+        {
+          graph = this.graphDS;
+        }
+        if (major == "MA")
+        {
+          graph = this.graphMA;
+        }
 
         // List of DAG keys
-        const k: string[] = Object.keys(this.graph);
+        const k: string[] = Object.keys(graph);
 
         // Reverses the DAG dictionary
-        for (const [key, val] of Object.entries(this.graph)) {
+        for (const [key, val] of Object.entries(graph)) {
             for (const vals of val) {
                 prereqs[vals] = prereqs[vals] || [];
                 prereqs[vals].push(key);
@@ -70,9 +129,21 @@ class REQPATH {
     constructor(major: string) {
         // Checks for the major (right now it's just CS) and retrieves req core courses (DAG) for it
         if (major === "CS") {
-            const m = new CS();
-            this.DAG = m._getGraph();
-            this.prereq = m._getPrereq();
+            const m = new MAJOR();
+            this.DAG = m._getGraphCS();
+            this.prereq = m._getPrereq(major);
+        }
+        if (major === "DS")
+        {
+            const m = new MAJOR();
+            this.DAG = m._getGraphDS();
+            this.prereq = m._getPrereq(major);
+        }
+        if (major == "MA")
+        {
+            const m = new MAJOR();
+            this.DAG = m._getGraphMA();
+            this.prereq = m._getPrereq(major);
         }
         else {
             this.DAG = {};
@@ -172,8 +243,15 @@ function sortIntoTerms(topOrder, termNum, preReqDict, maxReqsPerTerm)
 }
 
 export function runGenAlg(termsLeft: number, coursesTaken: string) 
-{
-    const dag = new REQPATH("CS");
+{   
+    //if CS major (want user input for this):
+    //const dag = new REQPATH("CS");
+
+    //if DS major (want user input for this):
+    //const dag = new REQPATH("DS");
+
+    //if MA (pure trakc) major (want user input for this):
+    const dag = new REQPATH("MA");
 
     const coursesTakenList = coursesTaken.split(" ");
     for (const course of coursesTakenList) {
@@ -233,6 +311,14 @@ export function runGenAlg(termsLeft: number, coursesTaken: string)
     }
     else
     {
+        //if schedule populated correctly --> fill empty slots (4 classes per term) with "optional"
+        for(let x = 0; x < schedule?.length; x++)
+        {
+            while(schedule[x].length < 4)
+            {
+                schedule[x].push("optional");
+            }
+        }
         //return results
         return JSON.stringify(schedule);
     }
