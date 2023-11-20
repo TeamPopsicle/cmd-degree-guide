@@ -18,9 +18,23 @@ export default function UserInput() {
         // TODO: Also save to User Database
         // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails
         saveToLocalStorage("schedule", runGenAlg(termsLeft, coursesTaken));
-        router.push("/CourseSelectionPage");
+                // Check the major and redirect accordingly
+        switch (major.toLowerCase()) {
+            case "computer science":
+                router.push("/compSciChecklist");
+                break;
+            case "data science":
+                router.push("/dataSciChecklist");
+                break;
+            case "math":
+                router.push("/mathChecklist");
+                break;
+            default:
+                // Redirect to a default page or show an error message
+                router.push("/defaultPage");
+                break;
     }
-
+    }
     return (
         <form
         onSubmit={e => {
@@ -78,25 +92,8 @@ export default function UserInput() {
                 <br />
             </label>
 
-            <label style={{color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
-                Enter courses taken, each separated by space:
-                <br />
-                <input
-                    type="text"
-                    value={coursesTaken}
-                    onChange={e => setCoursesTaken(e.target.value)}
-                     style={{
-                        border: "2px solid darkgreen", // Set the same color as the text
-                        borderRadius: "10px",
-                        padding: "8px",
-                        marginTop: "5px", // Add margin to separate from the label
-                        fontSize: "20px",
-                    }}
-                />
-                <br />
-            </label>
             <label style= {{marginBottom: "60px", color: "darkgreen", textAlign: "center", fontSize: "20px" }}>
-                    (e.g: 210 211 212)
+                    (choose from: computer science, data science, math)
                 </label>
             <button type="submit"
              style={{
