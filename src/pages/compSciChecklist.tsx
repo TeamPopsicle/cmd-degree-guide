@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from "next/router";
 
 interface Item {
   id: number;
@@ -45,6 +46,7 @@ const initialItems: Item[] = generateItems();
 
 function ChecklistTable() {
   const [data, setData] = useState(initialItems);
+  const router = useRouter();
 
   function handleClick(id: number) {
     const newData = data.map((item) => {
@@ -54,6 +56,10 @@ function ChecklistTable() {
       return item;
     });
     setData(newData);
+  }
+
+  function handleSubmit() {
+    router.push('/compSciSchedule');
   }
 
   return (
@@ -102,6 +108,7 @@ function ChecklistTable() {
 
       <button
         type="submit"
+        onClick={handleSubmit}
         style={{
           backgroundColor: "darkgreen",
           color: "#fbf4cf",
