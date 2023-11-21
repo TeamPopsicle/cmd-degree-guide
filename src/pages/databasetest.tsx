@@ -1,4 +1,5 @@
 import { sendQuery } from "@/lib/dbclient";
+import { send } from "process";
 import { useState } from "react";
 
 export default function DBTesting() {
@@ -12,13 +13,25 @@ export default function DBTesting() {
     }
 
     async function handleSelectQuery() {
-        const queryContent = "SELECT * FROM Classes";
+        const queryContent = "SELECT * FROM Classes WHERE Major = 'CS'";
         const responseObject = await sendQuery(queryContent);
         // Put whatever code to handle it below this, the first two lines and import above are all that's necessary
         console.log('Response:', responseObject);
         setClasses(responseObject.response); // Set the classes in state
         console.log(classes);
         setClassListShown(true);
+        const dagQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'CS'");
+        const dag: { ClassNumber: string; PrereqFor: string[]; }[] = dagQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
+            ClassNumber: item.ClassNumber,
+            PrereqFor: JSON.parse(item.PrereqFor)
+        }));
+        console.log(dag);
+        const dagObject: Record<string, string[]> = dag.reduce((acc: any, item) => {
+            acc[item.ClassNumber] = item.PrereqFor;
+            return acc;
+        }, {});
+
+        console.log(dagObject);
     }
 
     return (

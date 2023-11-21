@@ -77,11 +77,11 @@ class MAJOR {
       return this.graphMA;
     }
 
-    _getPrereq(major) {
+    _getPrereq(major: string) {
         // New way of accessing prereqs --> generates a dict based on the DAG
         // Logic: reverse the keys and vals of the DAG and then add in any classes with no prereqs at the end
         const prereqs: Record<string, string[]> = {};
-        let graph = {};
+        let graph: Record<string, string[]> = {};
 
         if (major == "CS")
         {
