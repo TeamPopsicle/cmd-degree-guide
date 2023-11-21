@@ -54,7 +54,7 @@ function ChecklistTable() {
   }
 
   function handleSubmit() {
-    router.push('/mathSchedule');
+    router.push('/finalSchedule');
   }
 
   return (

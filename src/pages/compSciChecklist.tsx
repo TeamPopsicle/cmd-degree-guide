@@ -59,7 +59,7 @@ function ChecklistTable() {
   }
 
   function handleSubmit() {
-    router.push('/compSciSchedule');
+    router.push('/finalSchedule');
   }
 
   return (

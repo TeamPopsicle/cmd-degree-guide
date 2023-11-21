@@ -57,7 +57,7 @@ function ChecklistTable() {
   }
 
   function handleSubmit() {
-    router.push('/dataSciSchedule');
+    router.push('/finalSchedule');
   }
 
   return (

@@ -69,7 +69,7 @@ const App: React.FC = () => {
   return (
     <div style={{ backgroundColor: '#fbf4cf', padding: '20px', textAlign: 'center', height: '100vh', }}>
       <h1 style={{ color: 'darkgreen', marginTop: '10px', fontSize: '35px', borderBottom: '10px solid rgb(87, 125, 65)'}}>
-        Math 4-year Degree Plan</h1>
+        Your 4-year Degree Plan</h1>
       <Schedule seasons={seasons} />
     </div>
   );
