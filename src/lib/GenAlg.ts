@@ -242,7 +242,7 @@ function sortIntoTerms(topOrder: string[], termNum: number, preReqDict: Record<s
 
 }
 
-export function runGenAlg(termsLeft: number, coursesTaken: string) 
+export function runGenAlg(termsLeft: number, coursesTaken: string, major: string) 
 {   
     //if CS major (want user input for this):
     //const dag = new REQPATH("CS");
@@ -251,7 +251,9 @@ export function runGenAlg(termsLeft: number, coursesTaken: string)
     //const dag = new REQPATH("DS");
 
     //if MA (pure trakc) major (want user input for this):
-    const dag = new REQPATH("MA");
+    //const dag = new REQPATH("MA");
+
+    const dag = new REQPATH(major);
 
     const coursesTakenList = coursesTaken.split(" ");
     for (const course of coursesTakenList) {
