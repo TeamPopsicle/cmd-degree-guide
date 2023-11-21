@@ -179,7 +179,7 @@ class REQPATH {
     }
 }
 
-function sortIntoTerms(topOrder, termNum, preReqDict, maxReqsPerTerm)
+function sortIntoTerms(topOrder: string[], termNum: number, preReqDict: Record<string, string[]>, maxReqsPerTerm: number)
 {
     //setting list of terms with each list being a term itself
     const terms: Array<string[]> = [];
@@ -275,7 +275,7 @@ export function runGenAlg(termsLeft: number, coursesTaken: string)
     const prereqs = dag.prereq;
     //console.log(JSON.stringify(prereqs));
     let maxReqsPerTerm = 2;
-    let schedule = null;
+    let schedule;
     let errorCount = 0;
 
     //using a while loop to account for overloading, adjusting based on how many terms left
@@ -303,16 +303,17 @@ export function runGenAlg(termsLeft: number, coursesTaken: string)
         }
     }
 
-    if (schedule == "No")
+    //after generating a schedule, if the schedule is valid/possible, add 'optional' to empty courses
+    if (typeof schedule == 'string' && schedule == "No")
     {
         //display console error
         console.error("You cannot graduate in that number of terms :(");
         return "";
     }
-    else
+    else if (Array.isArray(schedule))
     {
         //if schedule populated correctly --> fill empty slots (4 classes per term) with "optional"
-        for(let x = 0; x < schedule?.length; x++)
+        for(let x = 0; x < schedule.length; x++)
         {
             while(schedule[x].length < 4)
             {
@@ -322,63 +323,9 @@ export function runGenAlg(termsLeft: number, coursesTaken: string)
         //return results
         return JSON.stringify(schedule);
     }
-
-    //old code for reference:
-    /*try {
-        for (const course of topologicalOrder) {
-            // Get the list of prereqs for each term
-            const prereq = prereqs[course] || [];
-
-            // startTerm is going to hold the 'first' valid term
-            // currentTerm lets us iterate through all of the terms, checking for prereqs in each one
-            let startTerm = 0;
-            let currentTerm = 0;
-
-            // Loop usually runs only once, but necessary for courses with multiple prereqs
-            for (const p of prereq) {
-                // Algorithm for getting a valid term (no prereqs in that term or future terms) to store the current course
-                while (true) {
-                    // If currentTerm is at the end of the list, break out of the loop (looked at all terms)
-                    if (currentTerm > end) {
-                        break;
-                    }
-                    // If the prereq is in the current term, increase currentTerm and set startTerm = currentTerm (term after the term with the prereq)
-                    if (terms[currentTerm].includes(p)) {
-                        currentTerm += 1;
-                        startTerm = currentTerm;
-                    }
-                    // If the prereq isn't in the current term, iterate through to the next term
-                    else {
-                        currentTerm += 1;
-                    }
-                }
-                // This is only important if we have multiple prereqs, we set currentTerm = startTerm,
-                // since we know startTerm is the valid term for the first prereq, we don't have to start at the beginning of the list, start at this term
-                currentTerm = startTerm;
-            }
-            // This checks to make sure all terms are limited to 4 classes
-            if (terms[startTerm].length >= 4) {
-                let index = 1;
-                while (true) {
-                    if (terms[startTerm + index].length < 4) {
-                        terms[startTerm + index].push(course);
-                        break;
-                    }
-                    else {
-                        index += 1;
-                    }
-                }
-            }
-            else {
-                terms[startTerm].push(course);
-            }
-        }
-        return JSON.stringify(terms);
-    }
-    catch (e) {
-        // This is for catching errors, such as index errors, meaning not enough terms for classes left
-        console.error("You cannot graduate in that number of terms :(");
-        console.error(e);
+    else
+    {
+        console.error("Invalid schedule format");
         return "";
-    }*/
+    }
 }
