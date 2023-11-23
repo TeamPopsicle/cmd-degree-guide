@@ -123,8 +123,8 @@ class MAJOR {
 }
 
 class REQPATH {
-    DAG: Record<string, string[]>;
-    prereq: Record<string, string[]>;
+    DAG: Record<string, string[]> = {};
+    prereq: Record<string, string[]> = {};
     // Class for getting a valid path depending on the dag given by the chosen major
     constructor(major: string) {
         // Checks for the major (right now it's just CS) and retrieves req core courses (DAG) for it

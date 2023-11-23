@@ -9,6 +9,7 @@ export default function UserInput() {
     const [coursesTaken, setCoursesTaken] = useState("");
     const router = useRouter();
     const [major, setMajor] = useState("");
+    const [showClassesTable, setShowClassesTable] = useState(false);
     const [warningMessage, setWarningMessage] = useState("");
 
     // TODO: Check to make sure user is logged in, redirect back to login if not on open.
@@ -31,6 +32,12 @@ export default function UserInput() {
             setWarningMessage("Please choose a major before submitting.");
         }
     }
+
+    function handleMajorChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setShowClassesTable(e.target.value !== '')
+        setMajor(e.target.value);
+    }
+
     return (
         <form
             onSubmit={e => {
@@ -75,7 +82,7 @@ export default function UserInput() {
                 <br />
                 <select
                     value={major}
-                    onChange={e => setMajor(e.target.value)}
+                    onChange={handleMajorChange}
                     style={{
                         border: "2px solid darkgreen", // Set the same color as the text
                         borderRadius: "10px",
@@ -92,9 +99,8 @@ export default function UserInput() {
                 <br />
             </label>
 
-            <label style={{ marginBottom: "60px", color: "darkgreen", textAlign: "center", fontSize: "20px" }}>
-                (choose from: computer science, data science, math)
-            </label>
+            {showClassesTable && <p>Placeholder Text for Major {major}</p>}
+
             <button type="submit"
                 style={{
                     backgroundColor: "darkgreen",
