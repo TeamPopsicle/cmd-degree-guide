@@ -1,5 +1,6 @@
 import { runGenAlg } from "@/lib/GenAlg";
-import { saveToLocalStorage } from "@/lib/LocalStorage";
+import { getLocalStorage, saveToLocalStorage } from "@/lib/LocalStorage";
+import { sendQuery } from "@/lib/dbclient";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -14,27 +15,17 @@ export default function UserInput() {
     // Proposal: Use useEffect()
     // FIXME: Need a different way to delimit the courses input by the user. Commas instead? 
 
-    function handleSubmit() {
+    async function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
-        // TODO: Also save to User Database
         // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails
         if (major !== "") {
-            saveToLocalStorage("schedule", runGenAlg(termsLeft, coursesTaken, major));
-            // Check the major and redirect accordingly
-            switch (major.toLowerCase()) {
-                case "computer science":
-                    router.push("/compSciChecklist");
-                    break;
-                case "data science":
-                    router.push("/dataSciChecklist");
-                    break;
-                case "math":
-                    router.push("/mathChecklist");
-                    break;
-                default:
-                    // Redirect to a default page or show an error message
-                    router.push("/defaultPage");
-                    break;
+            const schedule = runGenAlg(termsLeft, coursesTaken, major);
+            saveToLocalStorage("schedule", schedule);
+            const username = getLocalStorage("loggedInUser");
+            const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
+            const scheduleResponseObject = await sendQuery(scheduleContent, schedule, username);
+            if (scheduleResponseObject) {
+                    router.push("/finalSchedule")
             }
         } else {
             setWarningMessage("Please choose a major before submitting.");
