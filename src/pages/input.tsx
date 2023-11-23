@@ -2,11 +2,72 @@ import { runGenAlg } from "@/lib/GenAlg";
 import { getLocalStorage, saveToLocalStorage } from "@/lib/LocalStorage";
 import { sendQuery } from "@/lib/dbclient";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+function ClassesTakenTable({ major, coursesTaken, setCoursesTaken }:
+    {
+        major: string
+        coursesTaken: string[]
+        setCoursesTaken: React.Dispatch<React.SetStateAction<string[]>>
+    }
+){
+    const [classesInMajor, setClassesInMajor] = useState<{ FullClassName: string, ClassNumber: string }[]>([]);
+    useEffect(() => {
+        async function fetchClasses() {
+            try {
+                const classesContent = "SELECT `FullClassName`, `ClassNumber` FROM `Classes` WHERE Major = ?";
+                const classesResponseObject = await sendQuery(classesContent, major);
+                console.log(classesResponseObject.response)
+                setClassesInMajor(classesResponseObject.response);
+            } catch (error) {
+                console.log("An error occured while fetching class data.");
+            }
+        }
+        fetchClasses();
+    }, [major]);
+
+    function handleCheckboxChange(classNumber: string) {
+        // Update the state to reflect the checkbox state
+        if (coursesTaken.includes(classNumber)) {
+            setCoursesTaken(coursesTaken.filter((takenClass) => takenClass !== classNumber));
+        } else {
+            setCoursesTaken([...coursesTaken, classNumber]);
+        }
+    };
+
+    return (
+        <div style={{ backgroundColor: '#fbf4cf', padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', maxHeight: '500px', overflowY: 'auto' }}>
+            <table>
+                <thead>
+                    <tr>
+                        <th style={{ color: 'darkgreen', fontWeight: 'bold' }}>Taken/Not Taken</th>
+                        <th style={{ color: 'darkgreen', fontWeight: 'bold' }}>Courses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {classesInMajor.map((classData, index) => (
+                        <tr key={index}>
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    onChange={() => {
+                                        handleCheckboxChange(classData.ClassNumber);
+                                    }}
+                                    checked={coursesTaken.includes(classData.ClassNumber)}
+                                />
+                            </td>
+                            <td style={{ color: 'darkgreen' }}>{classData.FullClassName}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
+}
 
 export default function UserInput() {
     const [termsLeft, setTermsLeft] = useState(0);
-    const [coursesTaken, setCoursesTaken] = useState("");
+    const [coursesTaken, setCoursesTaken] = useState<string[]>([]);
     const router = useRouter();
     const [major, setMajor] = useState("");
     const [showClassesTable, setShowClassesTable] = useState(false);
@@ -20,13 +81,13 @@ export default function UserInput() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
         // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails
         if (major !== "") {
-            const schedule = runGenAlg(termsLeft, coursesTaken, major);
+            const schedule = runGenAlg(termsLeft, coursesTaken.join(" "), major);
             saveToLocalStorage("schedule", schedule);
             const username = getLocalStorage("loggedInUser");
             const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
             const scheduleResponseObject = await sendQuery(scheduleContent, schedule, username);
             if (scheduleResponseObject) {
-                    router.push("/finalSchedule")
+                router.push("/finalSchedule")
             }
         } else {
             setWarningMessage("Please choose a major before submitting.");
@@ -34,8 +95,9 @@ export default function UserInput() {
     }
 
     function handleMajorChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        setShowClassesTable(e.target.value !== '')
+        setShowClassesTable(e.target.value !== '');
         setMajor(e.target.value);
+        setCoursesTaken([]);
     }
 
     return (
@@ -99,7 +161,7 @@ export default function UserInput() {
                 <br />
             </label>
 
-            {showClassesTable && <p>Placeholder Text for Major {major}</p>}
+            {showClassesTable && <ClassesTakenTable major={major} coursesTaken={coursesTaken} setCoursesTaken={setCoursesTaken} />}
 
             <button type="submit"
                 style={{
