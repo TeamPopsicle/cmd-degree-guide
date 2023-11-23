@@ -145,10 +145,6 @@ class REQPATH {
             this.DAG = m._getGraphMA();
             this.prereq = m._getPrereq(major);
         }
-        else {
-            this.DAG = {};
-            this.prereq = {};
-        }
     }
 
     topologicalSort() {
@@ -254,6 +250,7 @@ export function runGenAlg(termsLeft: number, coursesTaken: string, major: string
     //const dag = new REQPATH("MA");
 
     const dag = new REQPATH(major);
+    //const dag = new REQPATH("CS");
 
     const coursesTakenList = coursesTaken.split(" ");
     for (const course of coursesTakenList) {
@@ -323,6 +320,7 @@ export function runGenAlg(termsLeft: number, coursesTaken: string, major: string
             }
         }
         //return results
+        //console.log(JSON.stringify(schedule));
         return JSON.stringify(schedule);
     }
     else
