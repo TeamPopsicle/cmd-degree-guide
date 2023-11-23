@@ -75,7 +75,6 @@ export default function UserInput() {
 
     // TODO: Check to make sure user is logged in, redirect back to login if not on open.
     // Proposal: Use useEffect()
-    // FIXME: Need a different way to delimit the courses input by the user. Commas instead? 
 
     async function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage

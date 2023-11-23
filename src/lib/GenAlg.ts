@@ -4,7 +4,6 @@ class MAJOR {
     private graphMA: Record<string, string[]>;
     // Class for the CS major --> holds a DAG of all the required 'core' courses for major
     // TODO: Change this to get from database rather than hardcoded data
-    // TODO: Update database with series classes
     constructor() {
         this.graphCS =
         {
