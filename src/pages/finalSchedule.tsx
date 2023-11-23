@@ -1,10 +1,62 @@
-import React from 'react';
+import { getLocalStorage } from '@/lib/LocalStorage';
+import React, { useState, useEffect } from 'react';
 
 interface ScheduleProps {
   seasons: string[];
 }
 
+function TermTable({ parsedTerms }: { parsedTerms: string[][] }) {
+    // Ensure parsedTerms has at least 12 elements
+    const filledParsedTerms: Array<string[]> = [
+      ...parsedTerms,
+      ...Array(12 - parsedTerms.length).fill([]),
+    ];
+
+    return (
+      <tbody>
+        {
+          /**
+           * Sets up the structure a 3D array for all 4 years
+           * Starts by creating a sliced array from parsed terms containing 1 year (3 terms)
+           * This repeats 4 times, 1 for each year
+           * Each iteration returns the row for that year as a <tr>
+           * The overall resulting array follows the structure of a 3D array, like Plan[year[term[class]]]
+           */
+          Array.from({ length: 4 }, (_, yearIndex) => {
+            const slicedArray = filledParsedTerms.slice(
+              yearIndex * 3,
+              (yearIndex + 1) * 3
+            );
+
+            return (
+              <tr key={yearIndex}>
+                {slicedArray.map((term, termIndex) => (
+                  <td key={termIndex}>
+                    {term.map((className, index) => (
+                      <React.Fragment key={index}>
+                        <p>{className}</p>
+                      </React.Fragment>
+                    ))}
+                  </td>
+                ))}
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    );
+  }
+
 const Schedule: React.FC<ScheduleProps> = ({ seasons }) => {
+  const [parsedTerms, setParsedTerms] = useState<Array<string[]>>([]);
+
+  useEffect(() => {
+    // Fetch and parse the terms data on the client side
+    const terms = getLocalStorage("schedule");
+    const parsedTerms = terms ? JSON.parse(terms) : [];
+    setParsedTerms(parsedTerms);
+  }, []);
+  
   const containerStyle: React.CSSProperties = {
     flex: 1,
     overflow: 'auto',
@@ -49,15 +101,7 @@ const Schedule: React.FC<ScheduleProps> = ({ seasons }) => {
             ))}
           </tr>
         </thead>
-        <tbody>
-          {Array.from({ length: 4 }, (_, rowIndex) => (
-            <tr key={rowIndex}>
-              {Array.from({ length: 3 }, (_, colIndex) => (
-                <td key={colIndex} style={cellStyle}></td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
+        <TermTable parsedTerms={parsedTerms} />
       </table>
     </div>
   );
