@@ -257,7 +257,7 @@ export function runGenAlg(termsLeft: number, coursesTaken: string, major: string
             delete dag.DAG[course]
         }
     }
-
+    console.log(JSON.stringify(dag.DAG));
     const topologicalOrder = dag.topologicalSort();
     //console.log(dag.topologicalSort());
 
