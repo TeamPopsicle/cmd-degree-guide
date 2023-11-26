@@ -4,19 +4,38 @@
 class CS:
     #class for the CS major --> holds a DAG of all the required 'core' courses for major
     def __init__(self):
-        self.graph = {"210": ["211"],
+        '''self.graph = {"210": ["211"],
                       "211": ["212"], 
                       "212": ["313", "314"],
                       "231": ["232"], 
                       "232": ["313"], 
                       "313": ["315"], 
                       "315": ["425", "422"],
-                      "314": ["330"], 
+                      "314": ["330"],
                       "330": ["415"], 'mathseries1': ['mathseries2'], 
                       'mathseries2': ['mathelective1', 'mathelective2'],  
                       'scienceseries1': ['scienceseries2'], 
                       'scienceseries2': ['scienceseries3'], 'writing': []
-                      }
+                      }'''
+        self.graph = {
+            "CS210": ["CS211"],
+            "CS211": ["CS212"],
+            "CS212": ["CS313", "CS314"],
+            "MA231": ["MA232"],
+            "MA232": ["CS313"],
+            "CS313": ["CS315", "csElectiveAbove300_1", "csElectiveAbove300_2"],
+            "CS315": ["CS425", "CS422", "csElectiveAbove410_1"],
+            "CS314": ["CS330", "csElectiveAbove300_1", "csElectiveAbove300_2"],
+            "CS330": ["CS415", "csElectiveAbove410_1"],
+            "mathseries1": ["mathseries2"],
+            "mathseries2": ["mathelective1", "mathelective2"],
+            "scienceseries1": ["scienceseries2"],
+            "scienceseries2": ["scienceseries3"],
+            "writing": [],
+            "csElectiveAbove410_1": ["csElectiveAbove410_2", "csElectiveAbove410_3"],
+            "csElectiveAbove300_1": [],
+            "csElectiveAbove300_2": []
+          }
     
     def _get_graph(self):
         #helper function returning the graph
@@ -92,6 +111,10 @@ while True:
         if ask in dag.DAG:
             dag.DAG.pop(ask)
 
+#print(dag.DAG)
+#for x in dag.DAG:
+    #print(x,":", dag.DAG[x])
+
 #top sort enacted:
 topological_order = dag.topological_sort()
 #print(topological_order)
@@ -154,7 +177,7 @@ try:
         #bug here now with new reqs added --> need to check at end that everything is valid?
         
 
-    #once we have a system for prereqs for cs elective, won't have to worry about the below alg:
+    """#once we have a system for prereqs for cs elective, won't have to worry about the below alg:
 
     #cs elective system (for now) --> need 5 classes, 3 above 410
     #can't take these until pass 212, might even be higher
@@ -179,7 +202,7 @@ try:
             else:
                 break
         else:
-            start += 1
+            start += 1"""
                    
     print(terms)
 
@@ -190,6 +213,7 @@ try:
 except Exception as e:
     #this is for catching index errors--> meaning not enough terms for classes left 
     print("you cannot graduate in that number of terms fool :(")
+    print(e)
 
 #to do: 
 #add check at the end, going through each term, restricting number of math and cs courses
