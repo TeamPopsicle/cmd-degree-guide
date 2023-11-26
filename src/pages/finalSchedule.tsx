@@ -123,6 +123,42 @@ const App: React.FC = () => {
         margin: '10px', }}>
           Explore general education courses
         </a>
+        <a href="https://catalog.uoregon.edu/courses/" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          All courses
+        </a>
+        <a href="https://catalog.uoregon.edu/admissiontograduation/bachelorrequirements/" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Bachelor requirements
+        </a>
+        <a href="https://advising.uoregon.edu/" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Contact advisors
+        </a>
+        <a href="https://www.uoregon.edu/" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Others
+        </a>
       <Schedule seasons={seasons} />
     </div>
   );

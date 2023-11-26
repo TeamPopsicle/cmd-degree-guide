@@ -131,14 +131,14 @@ export default function UserInput() {
                     style={{
                         border: "2px solid darkgreen", // Set green color outline for the input box
                         borderRadius: "10px", // Add some border radius for a rounded look
-                        padding: "8px", // Add padding for better visual appeal
+                        padding: "6px", // Add padding for better visual appeal
                         marginTop: "5px", // Add margin to separate from the label
                         fontSize: "20px",
                     }}
                 />
             </label>
 
-            <label style={{ color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
+            <label style={{ marginBottom: "20px", color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
                 What is your major?
                 <br />
                 <select
