@@ -1,8 +1,10 @@
 import { runGenAlg } from "@/lib/GenAlg";
 import { getLocalStorage, saveToLocalStorage } from "@/lib/LocalStorage";
 import { sendQuery } from "@/lib/dbclient";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import styles from "@/styles/input.module.css";
 
 function ClassesTakenTable({ major, coursesTaken, setCoursesTaken }:
     {
@@ -10,7 +12,7 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken }:
         coursesTaken: string[]
         setCoursesTaken: React.Dispatch<React.SetStateAction<string[]>>
     }
-){
+) {
     const [classesInMajor, setClassesInMajor] = useState<{ FullClassName: string, ClassNumber: string }[]>([]);
     useEffect(() => {
         async function fetchClasses() {
@@ -36,12 +38,12 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken }:
     };
 
     return (
-        <div style={{ backgroundColor: '#fbf4cf', padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', maxHeight: '500px', overflowY: 'auto' }}>
-            <table>
+        <div className={styles['classes-taken-container']}>
+            <table className={styles['classes-taken-table']}>
                 <thead>
                     <tr>
-                        <th style={{ color: 'darkgreen', fontWeight: 'bold' }}>Taken/Not Taken</th>
-                        <th style={{ color: 'darkgreen', fontWeight: 'bold' }}>Courses</th>
+                        <th className={styles['classes-taken-th']}>Taken/Not Taken</th>
+                        <th className={styles['classes-taken-th']}>Courses</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +58,7 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken }:
                                     checked={coursesTaken.includes(classData.ClassNumber)}
                                 />
                             </td>
-                            <td style={{ color: 'darkgreen' }}>{classData.FullClassName}</td>
+                            <td className={styles['classes-taken-td']}>{classData.FullClassName}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -105,20 +107,9 @@ export default function UserInput() {
                 e.preventDefault();
                 handleSubmit();
             }}
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100vh",
-                backgroundColor: "#fbf4cf", // Set the background color for the entire webpage
-                padding: "20px", // Add some padding to the form
-                position: "relative", // Position relative for absolute positioning of the image
-                borderRadius: "15px",
-                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-            }}
+            className={styles['form-container']}
         >
-            <label style={{ marginBottom: "10px", color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
+            <label className={styles['input-label']}>
                 How many terms do you have until expected graduation? (max 12)
                 <br />
                 <input
@@ -128,29 +119,17 @@ export default function UserInput() {
                         setTermsLeft(inputValue === '' ? 0 : Number(inputValue));
                     }}
                     required
-                    style={{
-                        border: "2px solid darkgreen", // Set green color outline for the input box
-                        borderRadius: "10px", // Add some border radius for a rounded look
-                        padding: "6px", // Add padding for better visual appeal
-                        marginTop: "5px", // Add margin to separate from the label
-                        fontSize: "20px",
-                    }}
+                    className={styles['input-field']}
                 />
             </label>
 
-            <label style={{ marginBottom: "20px", color: "darkgreen", textAlign: "center", fontSize: "26px" }}>
+            <label className={styles['input-label']}>
                 What is your major?
                 <br />
                 <select
                     value={major}
                     onChange={handleMajorChange}
-                    style={{
-                        border: "2px solid darkgreen", // Set the same color as the text
-                        borderRadius: "10px",
-                        padding: "8px",
-                        marginTop: "5px", // Add margin to separate from the label
-                        fontSize: "20px",
-                    }}
+                    className={styles['select-field']}
                 >
                     <option value="" disabled>--Choose a Major--</option>
                     <option value={"CS"}>Computer Science</option>
@@ -162,52 +141,31 @@ export default function UserInput() {
 
             {showClassesTable && <ClassesTakenTable major={major} coursesTaken={coursesTaken} setCoursesTaken={setCoursesTaken} />}
 
-            <a href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/computer-sci/ug-computer-science/#requirementstext" target="_blank" rel="noopener noreferrer"
-        style={{         
-        color: 'darkgreen',
-        textDecoration: 'underline',
-        fontStyle: 'italic',
-        display: 'inline-block',
-        margin: '10px', }}>
-          Computer Science Requirements
-        </a>
-        <a href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/data-sci/#requirementstext" target="_blank" rel="noopener noreferrer"
-        style={{         
-        color: 'darkgreen',
-        textDecoration: 'underline',
-        fontStyle: 'italic',
-        display: 'inline-block',
-        margin: '10px', }}>
-          Data Science Requirements
-        </a>
-        <a href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/mathematics/ug-mathematics/#requirementstext" target="_blank" rel="noopener noreferrer"
-        style={{         
-        color: 'darkgreen',
-        textDecoration: 'underline',
-        fontStyle: 'italic',
-        display: 'inline-block',
-        margin: '10px', }}>
-          Math Requirements
-        </a>
-            <button type="submit"
-                style={{
-                    backgroundColor: "darkgreen",
-                    color: "#fbf4cf",
-                    padding: "12px 24px",
-                    fontSize: "20px",
-                    border: "none",
-                    borderRadius: "20px",
-                    cursor: "pointer",
-                    marginTop: "30px",
-                    transition: "background-color 0.3s", // Add transition effect on hover
-                }}
-                onMouseOver={(e) => {
-                    (e.target as HTMLElement).style.backgroundColor = "green"; // Change background color on hover
-                }}
-                onMouseOut={(e) => {
-                    (e.target as HTMLElement).style.backgroundColor = "darkgreen"; // Revert back to the original color on mouse out
-                }}
-            >Submit</button>
+            <Link
+                href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/computer-sci/ug-computer-science/#requirementstext"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles['custom-link']}
+            >
+                Computer Science Requirements
+            </Link>
+            <Link
+                href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/data-sci/#requirementstext"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles['custom-link']}
+            >
+                Data Science Requirements
+            </Link>
+            <Link
+                href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/mathematics/ug-mathematics/#requirementstext" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={styles['custom-link']}
+            >
+                Math Requirements
+            </Link>
+            <button type="submit" className={styles['submit-button']}>Submit</button>
 
             {warningMessage && <p className="text-red-500">{warningMessage}</p>}
         </form>

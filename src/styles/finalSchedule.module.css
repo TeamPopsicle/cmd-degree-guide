@@ -1,0 +1,52 @@
+.schedule-container {
+    flex: 1;
+    overflow: auto;
+    margin: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule-table {
+    border-collapse: collapse;
+    width: 90%;
+    border: 1px solid #333;
+    background-color: rgb(252, 252, 215);
+}
+
+.schedule-cell {
+    border: 2px solid darkgreen;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    height: 100px;
+    width: 33.33%;
+}
+
+.schedule-title-row {
+    background-color: rgb(87, 125, 65);
+    color: #fbf4cf;
+    font-size: 20px;
+}
+
+.container {
+    background-color: #fbf4cf;
+    padding: 20px;
+    text-align: center;
+    min-height: 100vh;
+}
+
+.page-title {
+    color: darkgreen;
+    margin-top: 10px;
+    font-size: 35px;
+    border-bottom: 10px solid rgb(87, 125, 65);
+}
+
+.link {
+    color: darkgreen;
+    text-decoration: underline;
+    font-style: italic;
+    display: inline-block;
+    margin: 10px;
+}
