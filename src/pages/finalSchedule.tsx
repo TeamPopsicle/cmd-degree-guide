@@ -111,9 +111,18 @@ const App: React.FC = () => {
   const seasons = ['Fall', 'Winter', 'Spring'];
 
   return (
-    <div style={{ backgroundColor: '#fbf4cf', padding: '20px', textAlign: 'center', height: '100vh', }}>
+    <div style={{ backgroundColor: '#fbf4cf', padding: '20px', textAlign: 'center', minHeight: '100vh', }}>
       <h1 style={{ color: 'darkgreen', marginTop: '10px', fontSize: '35px', borderBottom: '10px solid rgb(87, 125, 65)'}}>
         Your 4-year Degree Plan</h1>
+        <a href="https://catalog.uoregon.edu/genedcourses/#text" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Explore general education courses
+        </a>
       <Schedule seasons={seasons} />
     </div>
   );
