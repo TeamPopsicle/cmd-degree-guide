@@ -162,6 +162,33 @@ export default function UserInput() {
 
             {showClassesTable && <ClassesTakenTable major={major} coursesTaken={coursesTaken} setCoursesTaken={setCoursesTaken} />}
 
+            <a href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/computer-sci/ug-computer-science/#requirementstext" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Computer Science Requirements
+        </a>
+        <a href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/data-sci/#requirementstext" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Data Science Requirements
+        </a>
+        <a href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/mathematics/ug-mathematics/#requirementstext" target="_blank" rel="noopener noreferrer"
+        style={{         
+        color: 'darkgreen',
+        textDecoration: 'underline',
+        fontStyle: 'italic',
+        display: 'inline-block',
+        margin: '10px', }}>
+          Math Requirements
+        </a>
             <button type="submit"
                 style={{
                     backgroundColor: "darkgreen",
@@ -171,7 +198,7 @@ export default function UserInput() {
                     border: "none",
                     borderRadius: "20px",
                     cursor: "pointer",
-                    marginTop: "15px",
+                    marginTop: "30px",
                     transition: "background-color 0.3s", // Add transition effect on hover
                 }}
                 onMouseOver={(e) => {
@@ -181,6 +208,7 @@ export default function UserInput() {
                     (e.target as HTMLElement).style.backgroundColor = "darkgreen"; // Revert back to the original color on mouse out
                 }}
             >Submit</button>
+
             {warningMessage && <p className="text-red-500">{warningMessage}</p>}
         </form>
     );
