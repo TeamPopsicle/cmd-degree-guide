@@ -6,7 +6,7 @@ export default function Contact() {
     return ( 
         <> 
             <Navbar/> 
-            <h1>Contact the Team</h1> 
+            <h1>Contact the Developers</h1> 
             <div className="displayBox">
                 <p>Ethan Cha: echa@uoregon.edu</p>
                 <p>Peyton Elebash: peytone@uoregon.edu</p>

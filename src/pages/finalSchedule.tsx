@@ -2,6 +2,8 @@ import { getLocalStorage } from '@/lib/LocalStorage';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/finalSchedule.module.css';
+import Navbar from "@/components/Navbar/Navbar";
+
 
 interface ScheduleProps {
   seasons: string[];
@@ -82,19 +84,20 @@ export default function App() {
 
   return (
     <div className={styles['container']}>
+      <Navbar/>
       <h1 className={styles['page-title']}>
-        Your 4-year Degree Plan</h1>
-      <Link href="https://catalog.uoregon.edu/genedcourses/#text" target="_blank" rel="noopener noreferrer" className={styles['link']}>
-        Explore general education courses
-      </Link>
+        4-Year Degree Plan</h1>
       <Link href="https://catalog.uoregon.edu/courses/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
-        All courses
+        Course Catalog
+      </Link>
+      <Link href="https://catalog.uoregon.edu/genedcourses/#text" target="_blank" rel="noopener noreferrer" className={styles['link']}>
+        Core Education Courses
       </Link>
       <Link href="https://catalog.uoregon.edu/admissiontograduation/bachelorrequirements/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
-        Bachelor requirements
+        Bachelor's Degree Requirements 
       </Link>
       <Link href="https://advising.uoregon.edu/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
-        Contact advisors
+        Advising
       </Link>
       <Link href="https://www.uoregon.edu/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
         Others

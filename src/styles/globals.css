@@ -18,40 +18,35 @@
 
 body {
   font-family: "DM Sans", sans-serif;
-}
-
-Navbar { 
-  color: green; 
-  padding: 20px; /* these don't work */ 
+  margin: 0px;
 }
 
 h1 {
-  font-size: 200%;
+  font-size: 4vh;
   text-align: center;
   font-weight: bold;
   font-family: "Andale Mono", monospace;
   color: green;
   display: block;
-  margin: 5% auto 0% auto;
+  margin: 1.5em auto 1.5em auto;
 }
 
 p { 
-  margin: 2px 50px 10px 50px; 
   color: rgb(9, 66, 36);
+  font-size: 100%; 
 }
 
 .submitButton {  
   margin-top: 2%; 
-  padding: 1%;
+  padding: 2%;
   border: 1px solid green; 
-  border-radius: 0.5em; 
+  border-radius: 0.5rem; 
   background-color: green; 
-  color: yellow; 
+  color: white; 
 }
 
 .submitButton:hover { 
-  background-color: yellow; 
-  color: green; 
+  color: yellow; 
 }
 
 label { 
@@ -62,48 +57,82 @@ label {
 }
 
 input { 
-  margin-top: 1em; 
-  margin-bottom: 1em; 
+  margin-top: 1rem; 
+  margin-bottom: 1rem; 
 }
 
-
 .actionButton {
-  margin: 3em 2em 1em 2em;
-  display: flex;
+  margin-left: auto; 
+  margin-right: auto; 
+  margin-top: 1.5em; 
+  margin-bottom: 1.5em;
+  display: flex; 
   justify-content: center;
-  font-size: 120%; 
+  font-size: 1em; 
 }
 
 .actionButton a {
-  display: inline-block;
-  width: 25%;
-  margin-right: 5%;
-  margin-left: 5%;
+  display: block;
+  width: 30em;
+  margin: 1% 1% 1% 1%; 
   text-align: center;
-  padding: 2.5%;
+  font-size: 1em;
+  padding: 1em;
   border: 1px solid green;
-  border-radius: 1em;
+  border-radius: 1rem; 
   background-color: green;
   color: white;
 }
 
 .actionButton a:hover {
-  background-color: yellow;
   border-color: green;
-  color: green;
+  color: yellow;
 }
 
 .displayBox {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5%;
+  margin: 2% auto 0 auto; 
   width: 50%;
-  padding: 4em 2em 3em 2em;
+  min-width: 320px;
+  padding: 3.5rem; 
   background-color: rgba(253, 246, 208, 255);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.19), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 1rem 2rem 0 rgba(0, 0, 0, 0.19), 0 2rem 3rem 0 rgba(0, 0, 0, 0.19);
 }
 
+nav { 
+  display: block; 
+  text-align: center; 
+  width: 80%; 
+  margin-top: 2rem; 
+  margin-bottom: 2rem;
+  padding-bottom: 1rem; 
+  margin-left: auto; 
+  margin-right: auto; 
+  border-bottom: 1px solid darkgreen; 
+}
+
+nav a { 
+  font-family: "Andale Mono", monospace;
+  font-size: 1em;
+  margin-left: 2rem; 
+  margin-right: 2rem; 
+
+  color: darkgreen; 
+}
+
+nav a:hover{ 
+  color: yellowgreen; 
+
+}
+
+#Logo { 
+  width: 100em; 
+  margin-left: auto; 
+  margin-right: auto; 
+  margin-top: 2.5em; 
+  margin-bottom: 3em; 
+
+}
 
 table {
   border-collapse: collapse;

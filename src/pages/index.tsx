@@ -7,15 +7,16 @@ export default function Home() {
 
   return (
     <>
-      <div className="welcomeIn"><h1>Welcome to the CMD Degree Guide.</h1></div>
-
       <Navbar/>
+      <div><h1>Welcome to the CMD Degree Guide.</h1></div>
 
       <div className="displayBox">
-        <Image src={homeLogo} alt="CMD Degree Guide Logo" />
+        <Image id="Logo" src={homeLogo} alt="CMD Degree Guide Logo" />
         <div className="actionButton">
           <Link href="/login" id="loginButton">Log In</Link>
-          <Link href="/signup" id="signupButton"> Create Account</Link>
+        </div> 
+        <div className="actionButton"> 
+          <Link href="/signup" id="signupButton">Create Account</Link>
         </div>
       </div>
     </>
