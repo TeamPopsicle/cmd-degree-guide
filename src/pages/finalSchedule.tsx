@@ -94,7 +94,7 @@ export default function App() {
         Core Education Courses
       </Link>
       <Link href="https://catalog.uoregon.edu/admissiontograduation/bachelorrequirements/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
-        Bachelor's Degree Requirements 
+        Bachelor&apos;s Degree Requirements
       </Link>
       <Link href="https://advising.uoregon.edu/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
         Advising

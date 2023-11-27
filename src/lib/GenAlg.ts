@@ -1,69 +1,55 @@
+import { sendQuery } from "./dbclient";
+
 class MAJOR {
     private graphCS: Record<string, string[]>;
     private graphDS: Record<string, string[]>;
     private graphMA: Record<string, string[]>;
+    private initializationPromise: Promise<void>;
     // Class for the CS major --> holds a DAG of all the required 'core' courses for major
-    // TODO: Change this to get from database rather than hardcoded data
     constructor() {
-        this.graphCS =
-        {
-            "CS210": ["CS211"],
-            "CS211": ["CS212"],
-            "CS212": ["CS313", "CS314"],
-            "MA231": ["MA232"],
-            "MA232": ["CS313"],
-            "CS313": ["CS315", "csElectiveAbove300_1", "csElectiveAbove300_2"],
-            "CS315": ["CS425", "CS422", "csElectiveAbove410_1"],
-            "CS314": ["CS330", "csElectiveAbove300_1", "csElectiveAbove300_2"],
-            "CS330": ["CS415", "csElectiveAbove410_1"],
-            "CS425": [],
-            "CS422": [],
-            "CS415": [],
-            "mathseries1": ["mathseries2"],
-            "mathseries2": ["mathelective1", "mathelective2"],
-            "scienceseries1": ["scienceseries2"],
-            "scienceseries2": ["scienceseries3"],
-            "writing": [],
-            "csElectiveAbove410_1": ["csElectiveAbove410_2", "csElectiveAbove410_3"],
-            "csElectiveAbove300_1": [],
-            "csElectiveAbove300_2": []
-          };
-          this.graphDS = 
-          {
-            "DSCI101": ["DSCI102"],
-            "DSCI102": ["DSCI311", "DSCI345"],
-            "DSCI345": ["DSCI372"],
-            "CS210": ["CS211"],
-            "CS211": ["CS212", "DSCI311", "DSCI345"],
-            "CS212": ["DSCI372"],
-            "MA251": ["MA252"],
-            "MA341": ["MA342"],
-            "MA342": ["DSCI311", "DSCI345"],
-            "PH223": [],
-            "ComputationalAndInferentialDepth1": ["ComputationalAndInferentialDepth2"],
-            "ComputationalAndInferentialDepth2": ["ComputationalAndInferentialDepth3"],
-            "DomainCore1": ["DomainCore2"],
-            "DomainCore2": ["DomainElective1"],
-            "DomainElective1": ["DomainElective2", "DomainElective3", "DomainElective4"]
-          };
-          this.graphMA = 
-          {
-            "MA251": ["MA252"],
-            "MA252": ["MA253", "bridgeRequirement1","MA341"],
-            "MA253": ["MA281","MA316"],
-            "MA281": ["MA282"],
-            "MA341": ["MA342", "MA391"],
-            "MA391": ["MA392"],
-            "MA316": ["MA317"],
-            "bridgeRequirement1": ["bridgeRequirement2"],
-            "bridgeRequirement2": ["MathLab1"],
-            "MathLab1": ["MathLab2"],
-            "MathLab2": ["UpperDivisionMathElective1", "UpperDivisionMathElective2", "UpperDivSeq1"],
-            "UpperDivisionMathElective1": [],
-            "UpperDivisionMathElective2": [],
-            "UpperDivSeq1": ["UpperDivSeq2"],
-            "AnyCS": []
-            };
+        this.graphCS = {};
+        this.graphDS = {};
+        this.graphMA = {};
+
+        // Return a promise that resolves when initialization is complete
+        this.initializationPromise = this.initGraphs();
+    }
+
+    private async initGraphs() {
+        // CS Major
+        const dagCSQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'CS'");
+        const dagCS: { ClassNumber: string; PrereqFor: string[]; }[] = dagCSQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
+            ClassNumber: item.ClassNumber,
+            PrereqFor: JSON.parse(item.PrereqFor)
+        }));
+        // Math Major
+        const dagMathQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'MA'");
+        const dagMath: { ClassNumber: string; PrereqFor: string[]; }[] = dagMathQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
+            ClassNumber: item.ClassNumber,
+            PrereqFor: JSON.parse(item.PrereqFor)
+        }));
+        // DS Major
+        const dagDSQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'DS'");
+        const dagDS: { ClassNumber: string; PrereqFor: string[]; }[] = dagDSQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
+            ClassNumber: item.ClassNumber,
+            PrereqFor: JSON.parse(item.PrereqFor)
+        }));
+
+        // CS Graph
+        this.graphCS = dagCS.reduce((acc: any, item) => {
+            acc[item.ClassNumber] = item.PrereqFor;
+            return acc;
+        }, {});
+        // Math Graph
+        this.graphMA = dagMath.reduce((acc: any, item) => {
+            acc[item.ClassNumber] = item.PrereqFor;
+            return acc;
+        }, {});
+        // DS Graph
+        this.graphDS = dagDS.reduce((acc: any, item) => {
+            acc[item.ClassNumber] = item.PrereqFor;
+            return acc;
+        }, {});
     }
 
     _getGraphCS() {
@@ -122,32 +108,36 @@ class MAJOR {
         }
         return prereqs;
     }
+
+    getInitializationPromise() {
+        return this.initializationPromise;
+    }
 }
 
 class REQPATH {
     DAG: Record<string, string[]> = {};
     prereq: Record<string, string[]> = {};
+    majorInstance: MAJOR | null = null; // Store MAJOR instance
+
     // Class for getting a valid path depending on the dag given by the chosen major
-    constructor(major: string) {
-        // Checks for the major (right now it's just CS) and retrieves req core courses (DAG) for it
+    async init(major: string) {
+        const m = new MAJOR();
+        await m.getInitializationPromise();
+
         if (major === "CS") {
-            const m = new MAJOR();
             this.DAG = m._getGraphCS();
             this.prereq = m._getPrereq(major);
-        }
-        if (major === "DS")
-        {
-            const m = new MAJOR();
+        } else if (major === "DS") {
             this.DAG = m._getGraphDS();
             this.prereq = m._getPrereq(major);
-        }
-        if (major == "MA")
-        {
-            const m = new MAJOR();
+        } else if (major === "MA") {
             this.DAG = m._getGraphMA();
             this.prereq = m._getPrereq(major);
         }
+
+        this.majorInstance = m; // Store the MAJOR instance for later use
     }
+
 
     topologicalSort() {
         // Topologically sorts DAG using recursion; looks at each node and then uses visit to check the children nodes
@@ -240,7 +230,7 @@ function sortIntoTerms(topOrder: string[], termNum: number, preReqDict: Record<s
 
 }
 
-export function runGenAlg(termsLeft: number, coursesTaken: string, major: string) 
+export async function runGenAlg(termsLeft: number, coursesTaken: string, major: string) 
 {   
     //if CS major (want user input for this):
     //const dag = new REQPATH("CS");
@@ -251,7 +241,9 @@ export function runGenAlg(termsLeft: number, coursesTaken: string, major: string
     //if MA (pure trakc) major (want user input for this):
     //const dag = new REQPATH("MA");
 
-    const dag = new REQPATH(major);
+    const dag = new REQPATH();
+    await dag.init(major); // Wait for initialization to complete
+
     //const dag = new REQPATH("CS");
 
     const coursesTakenList = coursesTaken.split(" ");
@@ -260,7 +252,6 @@ export function runGenAlg(termsLeft: number, coursesTaken: string, major: string
             delete dag.DAG[course]
         }
     }
-    console.log(JSON.stringify(dag.DAG));
     const topologicalOrder = dag.topologicalSort();
     //console.log(dag.topologicalSort());
 

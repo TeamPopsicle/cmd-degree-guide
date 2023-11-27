@@ -80,9 +80,9 @@ export default function UserInput() {
 
     async function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
-        // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails
+        // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails. runGenAlg will return "" if schedule generation fails
         if (major !== "") {
-            const schedule = runGenAlg(termsLeft, coursesTaken.join(" "), major);
+            const schedule = await runGenAlg(termsLeft, coursesTaken.join(" "), major);
             saveToLocalStorage("schedule", schedule);
             const username = getLocalStorage("loggedInUser");
             const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
