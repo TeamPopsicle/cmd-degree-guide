@@ -82,15 +82,18 @@ export default function UserInput() {
 
     async function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
-        // TODO: Add error checking, e.g don't redirect and show error message if runGenAlg fails. runGenAlg will return "" if schedule generation fails
         if (major !== "") {
             const schedule = await runGenAlg(termsLeft, coursesTaken.join(" "), major);
-            saveToLocalStorage("schedule", schedule);
-            const username = getLocalStorage("loggedInUser");
-            const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
-            const scheduleResponseObject = await sendQuery(scheduleContent, schedule, username);
-            if (scheduleResponseObject) {
-                router.push("/finalSchedule")
+            if (schedule !== "") {
+                saveToLocalStorage("schedule", schedule);
+                const username = getLocalStorage("loggedInUser");
+                const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
+                const scheduleResponseObject = await sendQuery(scheduleContent, schedule, username);
+                if (scheduleResponseObject) {
+                    router.push("/finalSchedule")
+                }
+            } else {
+                setWarningMessage("You cannot graduate in that number of terms. Please see an advisor for further help.")
             }
         } else {
             setWarningMessage("Please choose a major before submitting.");
