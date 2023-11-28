@@ -6,27 +6,29 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "@/styles/input.module.css";
 
-function ClassesTakenTable({ major, coursesTaken, setCoursesTaken }:
+function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMessage }:
     {
         major: string
         coursesTaken: string[]
         setCoursesTaken: React.Dispatch<React.SetStateAction<string[]>>
+        setWarningMessage: React.Dispatch<React.SetStateAction<string>>
     }
 ) {
     const [classesInMajor, setClassesInMajor] = useState<{ FullClassName: string, ClassNumber: string }[]>([]);
     useEffect(() => {
         async function fetchClasses() {
-            try {
-                const classesContent = "SELECT `FullClassName`, `ClassNumber` FROM `Classes` WHERE Major = ?";
-                const classesResponseObject = await sendQuery(classesContent, major);
+            const classesContent = "SELECT `FullClassName`, `ClassNumber` FROM `Classes` WHERE Major = ?";
+            const classesResponseObject = await sendQuery(classesContent, major);
+            if (!classesResponseObject.response.error) {
                 console.log(classesResponseObject.response)
                 setClassesInMajor(classesResponseObject.response);
-            } catch (error) {
-                console.log("An error occured while fetching class data.");
+            } else {
+                console.error(classesResponseObject.response.error);
+                setWarningMessage("Unexpected internal error, see console and report the issue by contacting us.");
             }
         }
         fetchClasses();
-    }, [major]);
+    }, [major, setWarningMessage]);
 
     function handleCheckboxChange(classNumber: string) {
         // Update the state to reflect the checkbox state
@@ -139,7 +141,7 @@ export default function UserInput() {
                 <br />
             </label>
 
-            {showClassesTable && <ClassesTakenTable major={major} coursesTaken={coursesTaken} setCoursesTaken={setCoursesTaken} />}
+            {showClassesTable && <ClassesTakenTable major={major} coursesTaken={coursesTaken} setCoursesTaken={setCoursesTaken} setWarningMessage={setWarningMessage} />}
 
             <Link
                 href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/computer-sci/ug-computer-science/#requirementstext"
@@ -158,8 +160,8 @@ export default function UserInput() {
                 Data Science Requirements
             </Link>
             <Link
-                href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/mathematics/ug-mathematics/#requirementstext" 
-                target="_blank" 
+                href="https://catalog.uoregon.edu/arts-sciences/natural-sciences/mathematics/ug-mathematics/#requirementstext"
+                target="_blank"
                 rel="noopener noreferrer"
                 className={styles['custom-link']}
             >

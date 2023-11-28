@@ -6,7 +6,7 @@ import { useState } from "react";
 import { saveToLocalStorage } from "@/lib/LocalStorage";
 
 
-export default function Login() { 
+export default function Login() {
     const [loginMessage, setLoginMessage] = useState("");
     const router = useRouter();
 
@@ -16,18 +16,24 @@ export default function Login() {
             const existingUserCheckQuery = "SELECT * FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;"
             const existingUserResponseObject = await sendQuery(existingUserCheckQuery, username);
 
-            if (existingUserResponseObject.response.length > 0
-                && existingUserResponseObject.response[0].password === password) {
-                // User exists, login
-                saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
-                setLoginMessage("Log in success! Redirecting in 3 seconds...");
-                // Wait 3 seconds, then redirect
-                setTimeout(() => {
-                    router.push("/input");
-                }, 3000)
+            // Check if database connection was successful
+            if (!existingUserResponseObject.response.error) {
+                if (existingUserResponseObject.response.length > 0
+                    && existingUserResponseObject.response[0].password === password) {
+                    // User exists, login
+                    saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
+                    setLoginMessage("Log in success! Redirecting in 3 seconds...");
+                    // Wait 3 seconds, then redirect
+                    setTimeout(() => {
+                        router.push("/input");
+                    }, 3000)
+                } else {
+                    // Username and password are incorrect, stop
+                    setLoginMessage("Incorrect username and/or password.")
+                }
             } else {
-                // Username and password are incorrect, stop
-                setLoginMessage("Incorrect username and/or password.")
+                console.error(existingUserResponseObject.response.error);
+                setLoginMessage("Unexpected internal error, see console and report the issue by contacting us.");
             }
         } else {
             // Empty username or password
@@ -35,14 +41,14 @@ export default function Login() {
         }
     }
 
-    return ( 
+    return (
         <>
-            <Navbar/>
-            <h1> Log In </h1> 
+            <Navbar />
+            <h1> Log In </h1>
             <div className="displayBox">
-                <Form name="Login" onLogin={handleLogin}/>
+                <Form name="Login" onLogin={handleLogin} />
                 {loginMessage && <p className="text-red-500">{loginMessage}</p>}
-            </div> 
+            </div>
         </>
 
     )
