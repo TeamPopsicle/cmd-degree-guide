@@ -11,6 +11,8 @@ const db = mysql({
     }
 });
 
+const API_KEY = process.env.PRIVATE_API_KEY || 'defaultApiKey';
+
 /**
  * Sends a query to the database. This will run server-side, 
  * such as APIs and getServerSideProps; this should not be used in client-side code
@@ -33,8 +35,15 @@ export async function executeQuery(query: string, params: any[] = []) {
     }
 }
 
+// TODO: Add API password security check to prevent rogue api calls
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
+        const apiKey = req.headers.authorization;
+        // If given public api key does not match private api key do not process
+        if (!apiKey || apiKey !== `Bearer ${API_KEY}`) {
+            return res.status(401).json({ response: "Unauthorized" });
+        }
+        
         try {
             const { content, params } = req.body;
             const result = await executeQuery(content, params);

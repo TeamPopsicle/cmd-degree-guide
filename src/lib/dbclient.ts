@@ -10,6 +10,7 @@ export async function sendQuery(queryContent: string, ...params: any) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
             },
             body: JSON.stringify({ content: queryContent, params }),
         });
