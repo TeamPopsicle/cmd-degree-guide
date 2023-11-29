@@ -56,6 +56,7 @@ function Schedule({ seasons }: ScheduleProps) {
 
   useEffect(() => {
     // Fetch and parse the terms data on the client side
+    // TODO: Change from local storage to user schedule column under loggedInUser from localStorage
     const terms = getLocalStorage("schedule");
     const parsedTerms = terms ? JSON.parse(terms) : [];
     setParsedTerms(parsedTerms);
@@ -86,7 +87,8 @@ export default function App() {
     <div className={styles['container']}>
       <Navbar/>
       <h1 className={styles['page-title']}>
-        4-Year Degree Plan</h1>
+        4-Year Degree Plan
+      </h1>
       <Link href="https://catalog.uoregon.edu/courses/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
         Course Catalog
       </Link>
@@ -103,6 +105,7 @@ export default function App() {
         Others
       </Link>
       <Schedule seasons={seasons} />
+      <button className={styles['back-button']}>Back to Generation Input</button>
     </div>
   );
 };
