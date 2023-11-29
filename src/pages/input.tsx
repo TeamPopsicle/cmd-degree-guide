@@ -121,6 +121,8 @@ export default function UserInput() {
                 <br />
                 <input
                     type="number"
+                    min={0}
+                    max={12}
                     onChange={e => {
                         const inputValue = e.target.value;
                         setTermsLeft(inputValue === '' ? 0 : Number(inputValue));
