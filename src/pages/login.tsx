@@ -19,13 +19,28 @@ export default function Login() {
             // Check if database connection was successful
             if (!existingUserResponseObject.response.error) {
                 if (existingUserResponseObject.response.length > 0
-                    && existingUserResponseObject.response[0].password === password) {
+                && existingUserResponseObject.response[0].password === password) {
+                    let scheduleExists = false;
                     // User exists, login
                     saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
                     setLoginMessage("Log in success! Redirecting in 3 seconds...");
+                    // Check if schedule exists under user exists first
+                    const getScheduleContent = "SELECT `schedule` FROM `Users` WHERE username = ?";
+                    const getScheduleObject = await sendQuery(getScheduleContent, username);
+                    if (getScheduleObject.response[0].schedule) {
+                        console.log("schedule exists!");
+                        scheduleExists = true;
+                    } else {
+                        console.log("schedule do not exist!");
+                        scheduleExists = false;
+                    }
                     // Wait 3 seconds, then redirect
                     setTimeout(() => {
-                        router.push("/input");
+                        if (scheduleExists) {
+                            router.push("/finalSchedule")
+                        } else {
+                            router.push("/input");
+                        }
                     }, 3000)
                 } else {
                     // Username and password are incorrect, stop
