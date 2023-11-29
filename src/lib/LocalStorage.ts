@@ -24,7 +24,7 @@ export function getLocalStorage(key: string): string {
             return JSON.parse(jsonString) as string;
         }
     } catch (error) {
-        console.warn("localStorage key is empty.");
+        console.warn(`localStorage key ${key} is empty.`);
     }
     return "";
 }

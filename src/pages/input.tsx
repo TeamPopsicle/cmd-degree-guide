@@ -1,5 +1,5 @@
 import { runGenAlg } from "@/lib/GenAlg";
-import { getLocalStorage, saveToLocalStorage } from "@/lib/LocalStorage";
+import { getLocalStorage } from "@/lib/LocalStorage";
 import { sendQuery } from "@/lib/dbclient";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -70,6 +70,7 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMes
 }
 
 export default function UserInput() {
+    const loggedInUser = getLocalStorage("loggedInUser");
     const [termsLeft, setTermsLeft] = useState(0);
     const [coursesTaken, setCoursesTaken] = useState<string[]>([]);
     const router = useRouter();
@@ -77,18 +78,19 @@ export default function UserInput() {
     const [showClassesTable, setShowClassesTable] = useState(false);
     const [warningMessage, setWarningMessage] = useState("");
 
-    // TODO: Check to make sure user is logged in, redirect back to login if not on open.
-    // Proposal: Use useEffect()
+    useEffect(() => {
+        if (loggedInUser === "") {
+            router.push("/login");
+        }
+    }, [loggedInUser, router]);
 
     async function handleSubmit() {
         // Calculate algorithm here, then save the result of the algorithm to localStorage
         if (major !== "") {
             const schedule = await runGenAlg(termsLeft, coursesTaken.join(" "), major);
             if (schedule !== "") {
-                saveToLocalStorage("schedule", schedule);
-                const username = getLocalStorage("loggedInUser");
                 const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
-                const scheduleResponseObject = await sendQuery(scheduleContent, schedule, username);
+                const scheduleResponseObject = await sendQuery(scheduleContent, schedule, loggedInUser);
                 if (scheduleResponseObject) {
                     router.push("/finalSchedule")
                 }

@@ -3,10 +3,14 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/finalSchedule.module.css';
 import Navbar from "@/components/Navbar/Navbar";
+import { sendQuery } from '@/lib/dbclient';
+import { useRouter } from 'next/router';
 
 
 interface ScheduleProps {
   seasons: string[];
+  loggedInUser: string;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function TermTable({ parsedTerms }: { parsedTerms: string[][] }) {
@@ -51,16 +55,28 @@ function TermTable({ parsedTerms }: { parsedTerms: string[][] }) {
   );
 }
 
-function Schedule({ seasons }: ScheduleProps) {
+function Schedule({ seasons, loggedInUser, setErrorMessage }: ScheduleProps) {
   const [parsedTerms, setParsedTerms] = useState<Array<string[]>>([]);
 
   useEffect(() => {
     // Fetch and parse the terms data on the client side
-    // TODO: Change from local storage to user schedule column under loggedInUser from localStorage
-    const terms = getLocalStorage("schedule");
-    const parsedTerms = terms ? JSON.parse(terms) : [];
-    setParsedTerms(parsedTerms);
-  }, []);
+    async function fetchSchedule() {
+      if (loggedInUser) {
+        const termsContent = "SELECT `schedule` FROM `Users` WHERE username = ?";
+        const termsObject = await sendQuery(termsContent, loggedInUser);
+        if (!termsObject.response.error) {
+          const terms = termsObject.response[0].schedule;
+          const parsedTerms = terms ? JSON.parse(terms) : [];
+          setParsedTerms(parsedTerms);
+        } else {
+          console.error(termsObject.response.error);
+          setErrorMessage("Unexpected internal error, see console and report the issue by contacting us.");
+        }
+      }
+
+    }
+    fetchSchedule();
+  }, [loggedInUser, setErrorMessage]);
 
   return (
     <div className={styles['schedule-container']}>
@@ -82,10 +98,31 @@ function Schedule({ seasons }: ScheduleProps) {
 
 export default function App() {
   const seasons = ['Fall', 'Winter', 'Spring'];
+  const loggedInUser = getLocalStorage("loggedInUser");
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (loggedInUser === "") {
+      router.push("/login");
+    }
+  }, [loggedInUser, router])
+
+  async function handleBack() {
+    // Delete user schedule so they can properly go back to /input
+    const scheduleContent = "UPDATE `Users` SET `schedule` = NULL WHERE (`username` = ?);";
+    const scheduleResponseObject = await sendQuery(scheduleContent, loggedInUser);
+    if (!scheduleResponseObject.response.error) {
+      router.push("/input");
+    } else {
+      console.error(scheduleResponseObject.response.error);
+      setErrorMessage("Unexpected internal error, see console and report the issue by contacting us.");
+    }
+  }
 
   return (
     <div className={styles['container']}>
-      <Navbar/>
+      <Navbar />
       <h1 className={styles['page-title']}>
         4-Year Degree Plan
       </h1>
@@ -104,8 +141,9 @@ export default function App() {
       <Link href="https://www.uoregon.edu/" target="_blank" rel="noopener noreferrer" className={styles['link']}>
         Others
       </Link>
-      <Schedule seasons={seasons} />
-      <button className={styles['back-button']}>Back to Generation Input</button>
+      <Schedule seasons={seasons} loggedInUser={loggedInUser} setErrorMessage={setErrorMessage} />
+      <button className={styles['back-button']} onClick={handleBack}>Delete Schedule and Go Back to Schedule Input</button>
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
     </div>
   );
 };
