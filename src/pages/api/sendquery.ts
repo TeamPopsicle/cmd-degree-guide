@@ -37,13 +37,23 @@ export async function executeQuery(query: string, params: any[] = []) {
 
 // TODO: Add API password security check to prevent rogue api calls
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', 'https://cmd-degree-guide.vercel.app http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === "OPTIONS") {
+        // Pre-flight request. Reply successfully:
+        return res.status(200).end();
+    }
+    
     if (req.method === "POST") {
         const apiKey = req.headers.authorization;
         // If given public api key does not match private api key do not process
         if (!apiKey || apiKey !== `Bearer ${API_KEY}`) {
             return res.status(401).json({ response: "Unauthorized" });
         }
-        
+
         try {
             const { content, params } = req.body;
             const result = await executeQuery(content, params);

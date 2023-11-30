@@ -1,5 +1,4 @@
 import { sendQuery } from "@/lib/dbclient";
-import { send } from "process";
 import { useState } from "react";
 
 export default function DBTesting() {
