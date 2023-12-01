@@ -1,5 +1,5 @@
 # CMD Degree Guide
-### Developed by Team Popsicle (Ethan Cha, Haley Figone, Peyton Taylor, Yaya Yao)
+### Developed by Team Popsicle (Ethan Cha, Haley Figone, Peyton Elebash, Yaya Yao)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
