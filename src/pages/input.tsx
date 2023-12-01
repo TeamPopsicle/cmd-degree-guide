@@ -108,7 +108,7 @@ export default function UserInput() {
     }, [loggedInUser, router]);
 
     async function handleSubmit() {
-        // Calculate algorithm here, then save the result of the algorithm to database as string
+        // Runs algorithm here, then save the result of the algorithm to database as string
         if (major !== "") {
             const schedule = await runGenAlg(termsLeft, coursesTaken.join(" "), major);
             if (schedule !== "") {
