@@ -7,7 +7,11 @@
 //database access
 import { sendQuery } from "./dbclient";
 
-//class that eventually holds a DAG of all the required courses for the selected major (based off of user input and class info from database)
+/**
+     * Class that eventually holds a DAG of all the required courses for the selected major (based off of user input and class info from database)
+     * This is necessary because we need something to 'hold' our working DAG
+     * @returns specific graphs as well as a prereq datastructure for the graphs
+     */
 class MAJOR {
     private graphCS: Record<string, string[]>;
     private graphDS: Record<string, string[]>;
@@ -131,7 +135,11 @@ class MAJOR {
     }
 }
 
-// Class for getting a valid path depending on the DAG given by the chosen major
+/**
+     * Class for initializing a graph based on the major selected and performing topological sort on DAG
+     * This is necessary because we need a way to tell the Major class which DAG it should grab from the database
+     * @returns topological sorted path of the working DAG
+     */
 class REQPATH {
     DAG: Record<string, string[]> = {};
     prereq: Record<string, string[]> = {};
