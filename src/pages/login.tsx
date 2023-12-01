@@ -34,13 +34,11 @@ export default function Login() {
                     const getScheduleContent = "SELECT `schedule` FROM `Users` WHERE username = ?";
                     const getScheduleObject = await sendQuery(getScheduleContent, username);
                     if (getScheduleObject.response[0].schedule) {
-                        console.log("schedule exists!");
                         scheduleExists = true;
                     } else {
-                        console.log("schedule do not exist!");
                         scheduleExists = false;
                     }
-                    // Wait 3 seconds, then redirect
+                    // Wait 3 seconds, then redirect to final schedule if a schedule exists (not null), otherwise redirect to input
                     setTimeout(() => {
                         if (scheduleExists) {
                             router.push("/finalSchedule")
