@@ -1,9 +1,42 @@
+# CMD Degree Guide
+### Developed by Team Popsicle (Ethan Cha, Haley Figone, Peyton Taylor, Yaya Yao)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+The full web app for CMD Degree Guide can be viewed [here](https://cmd-degree-guide.vercel.app/)
 
-First, run the development server:
+## Getting Started for Developing
 
+You will need to provide your own MySQL database and data. The database will need to be structured with two tables with their schemas as shown:
+
+![Database Diagram](/public/db_structure.png)
+
+Provide the credentials to access the database as well as the API keys for the app to send database queries using environment variables. You can also choose to put the environment variables in a `.env.local` file, which needs to be filled like so:
+
+```
+MYSQL_HOST= your.mysql.host
+MYSQL_PORT= 3306
+MYSQL_DATABASE= your_db_name
+MYSQL_USER= your_user_name
+MYSQL_PASSWORD= your_password
+NEXT_PUBLIC_API_KEY= my-api-key
+PRIVATE_API_KEY= my-api-key
+```
+
+`NEXT_PUBLIC_API_KEY` and `PRIVATE_API_KEY` can be whatever you want, but they must be the same.
+
+Install all dependencies using your preferred Node package manager:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+Then run the development environment
 ```bash
 npm run dev
 # or
@@ -21,8 +54,6 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ## Learn More
 
