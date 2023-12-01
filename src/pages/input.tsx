@@ -4,6 +4,7 @@
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
 
+// Importing necessary modules and components
 import { runGenAlg } from "@/lib/GenAlg";
 import { getLocalStorage } from "@/lib/LocalStorage";
 import { sendQuery } from "@/lib/dbclient";
@@ -43,6 +44,11 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMes
         fetchClasses();
     }, [major, setWarningMessage]);
 
+ /**
+   * Handles checkbox change for each class.
+   * Updates the state to reflect the checkbox state and adds or removes it from coursesTaken array.
+   * @param classNumber - ClassNumber of the selected class
+   */
     function handleCheckboxChange(classNumber: string) {
         // Update the state to reflect the checkbox state, then adds or removes it to coursesTaken array
         if (coursesTaken.includes(classNumber)) {
