@@ -4,14 +4,16 @@
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
 
+//database access
 import { sendQuery } from "./dbclient";
 
+//class that eventually holds a DAG of all the required courses for the selected major (based off of user input and class info from database)
 class MAJOR {
     private graphCS: Record<string, string[]>;
     private graphDS: Record<string, string[]>;
     private graphMA: Record<string, string[]>;
     private initializationPromise: Promise<void>;
-    // Class for the CS major --> holds a DAG of all the required 'core' courses for major
+
     constructor() {
         this.graphCS = {};
         this.graphDS = {};
@@ -59,15 +61,17 @@ class MAJOR {
     }
 
     _getGraphCS() {
-        // Helper function returning the graph
+        // Helper function returning the CS graph
         return this.graphCS;
     }
     _getGraphDS()
     {
+        // Helper function returning the DS graph
       return this.graphDS;
     }
     _getGraphMA()
     {
+        // Helper function returning the MA graph
       return this.graphMA;
     }
 
@@ -120,12 +124,12 @@ class MAJOR {
     }
 }
 
+// Class for getting a valid path depending on the DAG given by the chosen major
 class REQPATH {
     DAG: Record<string, string[]> = {};
     prereq: Record<string, string[]> = {};
     majorInstance: MAJOR | null = null; // Store MAJOR instance
 
-    // Class for getting a valid path depending on the dag given by the chosen major
     async init(major: string) {
         const m = new MAJOR();
         await m.getInitializationPromise();
@@ -144,12 +148,12 @@ class REQPATH {
         this.majorInstance = m; // Store the MAJOR instance for later use
     }
 
-
     topologicalSort() {
         // Topologically sorts DAG using recursion; looks at each node and then uses visit to check the children nodes
         const visited: Record<string, boolean> = {};
         const topologicalOrder: string[] = [];
 
+        //initiates the top sort, using the visit function as a helper for the recursive alg
         for (const node in this.DAG) {
             if (!(node in visited)) {
                 this.visit(node, visited, topologicalOrder);
@@ -175,6 +179,8 @@ class REQPATH {
 
 function sortIntoTerms(topOrder: string[], termNum: number, preReqDict: Record<string, string[]>, maxReqsPerTerm: number)
 {
+    //function that sorts courses from path into terms based off of how many terms user inputs, the topsort, the prereqs, and the max courses per term
+
     //setting list of terms with each list being a term itself
     const terms: Array<string[]> = [];
     for (let i = 0; i < termNum; i++) {
@@ -238,40 +244,28 @@ function sortIntoTerms(topOrder: string[], termNum: number, preReqDict: Record<s
 
 export async function runGenAlg(termsLeft: number, coursesTaken: string, major: string) 
 {   
-    //if CS major (want user input for this):
-    //const dag = new REQPATH("CS");
+    //runs the generative algorithm connecting all the code and ending with a schedule or warning
 
-    //if DS major (want user input for this):
-    //const dag = new REQPATH("DS");
-
-    //if MA (pure trakc) major (want user input for this):
-    //const dag = new REQPATH("MA");
-
+    //initiates new DAG and path based off of the user's input
     const dag = new REQPATH();
     await dag.init(major); // Wait for initialization to complete
 
-    //const dag = new REQPATH("CS");
-
+    //delete terms the user inputs they have already taken from the DAG
     const coursesTakenList = coursesTaken.split(" ");
     for (const course of coursesTakenList) {
         if (dag.DAG[course]) {
             delete dag.DAG[course]
         }
     }
+
+    //topologically sorts the 'new' DAG into a valid path
     const topologicalOrder = dag.topologicalSort();
     //console.log(dag.topologicalSort());
 
-    //setting list of terms with each list being a term itself
-    /*const terms: Array<string[]> = [];
-    for (let i = 0; i < termsLeft; i++) {
-        terms.push([]);
-    }
-    //keeps track of 'end' of the list of terms
-    const end = terms.length - 1;*/
-
     //prereq dict:
     const prereqs = dag.prereq;
-    //console.log(JSON.stringify(prereqs));
+    
+    //necessary variables for testing max number of courses allowed per each term
     let maxReqsPerTerm = 2;
     let schedule;
     let errorCount = 0;
@@ -281,20 +275,23 @@ export async function runGenAlg(termsLeft: number, coursesTaken: string, major: 
     {
         //using function to sort into terms, testing for errors
         try
-        {
+        {   //if works with no error --> this is final schedule
             schedule = sortIntoTerms(topologicalOrder, termsLeft, prereqs, maxReqsPerTerm);
             break;
         }
         catch
         {
+            //error caught, either cannot make schedule or try again with more courses per term
             if (errorCount < 2)
             {
+                //haven't reached max of 4 courses per term --> continue trying more courses per term
                 maxReqsPerTerm += 1;
                 errorCount += 1;
                 continue;
             }
             else
             {
+                //maxxed out number of courses per term --> schedule cannot be created
                 schedule = "No"
                 break;
             }
@@ -319,7 +316,6 @@ export async function runGenAlg(termsLeft: number, coursesTaken: string, major: 
             }
         }
         //return results
-        //console.log(JSON.stringify(schedule));
         return JSON.stringify(schedule);
     }
     else
