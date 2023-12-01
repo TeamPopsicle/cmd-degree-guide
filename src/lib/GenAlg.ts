@@ -1,3 +1,10 @@
+/* 
+    i. This is the generative algorithm used to create the schedule based on the student's input
+    ii. Popsicle
+    iii. Ethan Cha, Peyton Elebash
+    iv. Peyton created the basic algorithm, Ethan made the algorithm interactive
+        with the input from the webapp (functionality).
+*/
 import { sendQuery } from "./dbclient";
 
 class MAJOR {

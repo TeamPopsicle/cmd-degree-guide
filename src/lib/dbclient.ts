@@ -1,3 +1,12 @@
+/*
+    i. a statement of what it represents or implements,
+    ii. the group name,
+    iii. the names of all authors (alphabetically by last name),
+    iv. the product’s author information should be clear, i.e., what each
+        component is or implements, who created or last updated it, and
+        when.
+*/
+
 /**
  * Asynchronously sends a query to the database by sending an API call to itself
  * @param queryContent The SQL query to send it
