@@ -1,3 +1,9 @@
+/*
+    i. a statement of what it represents or implements,
+    ii. Popsicle
+    iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
+*/
+
 import { useState, useEffect } from "react";
 
 const useMediaQuery = (query: string) => {
