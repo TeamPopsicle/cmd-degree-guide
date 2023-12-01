@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. User sets parameters for the generative algorithm for their schedule
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
@@ -12,6 +12,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "@/styles/input.module.css";
 
+/**
+ * JSX component for the table/checklist of classes in their major,
+ * where the user can select which classes they have already taken
+ * The parameters are states and state setters passed as props to this component,
+ * They will act like pointers to the original state variables in a sense
+ */
 function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMessage }:
     {
         major: string
@@ -21,6 +27,7 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMes
     }
 ) {
     const [classesInMajor, setClassesInMajor] = useState<{ FullClassName: string, ClassNumber: string }[]>([]);
+    // Any time the user sets their major, update the classesInMajor array
     useEffect(() => {
         async function fetchClasses() {
             const classesContent = "SELECT `FullClassName`, `ClassNumber` FROM `Classes` WHERE Major = ?";
@@ -37,7 +44,7 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMes
     }, [major, setWarningMessage]);
 
     function handleCheckboxChange(classNumber: string) {
-        // Update the state to reflect the checkbox state
+        // Update the state to reflect the checkbox state, then adds or removes it to coursesTaken array
         if (coursesTaken.includes(classNumber)) {
             setCoursesTaken(coursesTaken.filter((takenClass) => takenClass !== classNumber));
         } else {
@@ -55,6 +62,9 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMes
                     </tr>
                 </thead>
                 <tbody>
+                    {/* Maps classesInMajor array as a table checklist, 
+                    showing the user the FullClassName column in database and each checkbox
+                    corresponding to the appropriate ClassNumber in database */}
                     {classesInMajor.map((classData, index) => (
                         <tr key={index}>
                             <td>
@@ -84,6 +94,7 @@ export default function UserInput() {
     const [showClassesTable, setShowClassesTable] = useState(false);
     const [warningMessage, setWarningMessage] = useState("");
 
+    // Check on visit if user is logged in first, redirect to login if not
     useEffect(() => {
         if (loggedInUser === "") {
             router.push("/login");
@@ -91,7 +102,7 @@ export default function UserInput() {
     }, [loggedInUser, router]);
 
     async function handleSubmit() {
-        // Calculate algorithm here, then save the result of the algorithm to localStorage
+        // Calculate algorithm here, then save the result of the algorithm to database as string
         if (major !== "") {
             const schedule = await runGenAlg(termsLeft, coursesTaken.join(" "), major);
             if (schedule !== "") {
@@ -111,7 +122,7 @@ export default function UserInput() {
     function handleMajorChange(e: React.ChangeEvent<HTMLSelectElement>) {
         setShowClassesTable(e.target.value !== '');
         setMajor(e.target.value);
-        setCoursesTaken([]);
+        setCoursesTaken([]); // Clears courses taken array to avoid stray classes, i.e if the user checks a class, then changes majors
     }
 
     return (
@@ -148,8 +159,8 @@ export default function UserInput() {
                 >
                     <option value="" disabled>--Choose a Major--</option>
                     <option value={"CS"}>Computer Science</option>
-                    <option value={"DS"}>Data Science</option>
                     <option value={"MA"}>Math</option>
+                    <option value={"DS"}>Data Science</option>
                 </select>
                 <br />
             </label>

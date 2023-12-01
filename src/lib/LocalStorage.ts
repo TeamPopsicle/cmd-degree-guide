@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Interact with the browser's localStorage API in easy-to-use functions
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
@@ -20,8 +20,9 @@ export function saveToLocalStorage(key: string, data: string): void {
 
 /**
  * Retrieves the array of objects from localStorage as a string
- * Returns an empty string and throws a warning if not found.
  * @param key The key to read from localStorage
+ * @returns The string stored in key
+ * @returns An empty string and logs a warning if key is not found or is empty
  */
 export function getLocalStorage(key: string): string {
     try {

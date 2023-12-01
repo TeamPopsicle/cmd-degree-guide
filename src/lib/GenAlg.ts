@@ -43,6 +43,7 @@ class MAJOR {
             PrereqFor: JSON.parse(item.PrereqFor)
         }));
 
+        // All reduce functions "translate" the array of objects into a Record<string, string[]>, which resembles a python dictionary
         // CS Graph
         this.graphCS = dagCS.reduce((acc: any, item) => {
             acc[item.ClassNumber] = item.PrereqFor;
@@ -119,6 +120,12 @@ class MAJOR {
         return prereqs;
     }
 
+    /**
+     * Function that checks if initialization promise is resolved.
+     * This is necessary because we don't want the code to move on before the graphs are populated
+     * as sending database queries is an asynchronous function
+     * @returns A promise that resolves when initialization is complete
+     */
     getInitializationPromise() {
         return this.initializationPromise;
     }
@@ -130,9 +137,11 @@ class REQPATH {
     prereq: Record<string, string[]> = {};
     majorInstance: MAJOR | null = null; // Store MAJOR instance
 
+    // Class for getting a valid path depending on the dag given by the chosen major
+    // Similar to constructor, but getting graph data from database is an async function so must run init on class before using it
     async init(major: string) {
         const m = new MAJOR();
-        await m.getInitializationPromise();
+        await m.getInitializationPromise(); // Waits for MAJOR class to finish populating its graphs with data from database before moving on
 
         if (major === "CS") {
             this.DAG = m._getGraphCS();
@@ -242,6 +251,15 @@ function sortIntoTerms(topOrder: string[], termNum: number, preReqDict: Record<s
 
 }
 
+/**
+ * Runs the generative algorithm and creates a suggested schedule for the student
+ * @param termsLeft Number of terms a student has left to take (maximum 12)
+ * @param coursesTaken Courses a student has already taken, formatted as a string
+ * with each class separated by a space and each class matching the class number in database
+ * @param major The major abbreviation the student is in: CS, MA, or DS as of now
+ * @returns A promise that will resolve into a string of a 2D array, 
+ * each 1D array in 2D array being one term and each element in the 1D array being a string of a class
+ */
 export async function runGenAlg(termsLeft: number, coursesTaken: string, major: string) 
 {   
     //runs the generative algorithm connecting all the code and ending with a schedule or warning

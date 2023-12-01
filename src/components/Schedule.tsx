@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Schedule component used in /finalSchedule
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
@@ -11,8 +11,8 @@ import React from "react";
 
 interface ScheduleProps {
     seasons: string[];
-    loggedInUser: string;
-    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    loggedInUser: string; // State passed as a prop
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>; // State setter passed as a prop
 }
 
 function TermTable({ parsedTerms }: { parsedTerms: string[][] }) {
@@ -26,10 +26,10 @@ function TermTable({ parsedTerms }: { parsedTerms: string[][] }) {
         <tbody>
             {
                 /**
-                 * Sets up the structure a 3D array for all 4 years
+                 * Sets up the structure of a 3D array for all 4 years
                  * Starts by creating a sliced array from parsed terms containing 1 year (3 terms)
                  * This repeats 4 times, 1 for each year
-                 * Each iteration returns the row for that year as a <tr>
+                 * Each iteration returns a year as a row, aka a <tr>
                  * The overall resulting array follows the structure of a 3D array, like Plan[year[term[class]]]
                  */
                 Array.from({ length: 4 }, (_, yearIndex) => {
@@ -67,8 +67,9 @@ export default function Schedule({ seasons, loggedInUser, setErrorMessage }: Sch
                 const termsContent = "SELECT `schedule` FROM `Users` WHERE username = ?";
                 const termsObject = await sendQuery(termsContent, loggedInUser);
                 if (!termsObject.response.error) {
-                    const terms = termsObject.response[0].schedule;
-                    const parsedTerms = terms ? JSON.parse(terms) : [];
+                    console.log("terms", termsObject.response);
+                    const terms = termsObject.response[0].schedule; // Get schedule from SQL response
+                    const parsedTerms = terms ? JSON.parse(terms) : []; // Parse the string as JSON, turning it back into a 2D array
                     setParsedTerms(parsedTerms);
                 } else {
                     console.error(termsObject.response.error);

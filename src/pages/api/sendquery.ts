@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Server side API endpoint that communicates with the database, see https://nextjs.org/docs/api-routes/introduction
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
@@ -41,7 +41,11 @@ export async function executeQuery(query: string, params: any[] = []) {
     }
 }
 
-// TODO: Add API password security check to prevent rogue api calls
+/**
+ * Processes the API request, see https://nextjs.org/docs/api-routes/introduction for details
+ * @param req API request instance
+ * @param res API response instance
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', 'https://cmd-degree-guide.vercel.app http://localhost:3000');

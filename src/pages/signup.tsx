@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Signup page for new users to create their schedule
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */

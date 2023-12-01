@@ -13,6 +13,7 @@ You will need to provide your own MySQL database and data. The database will nee
 
 Provide the credentials to access the database as well as the API keys for the app to send database queries using environment variables. You can also choose to put the environment variables in a `.env.local` file, which needs to be filled like so:
 
+Example ``.env.local``:
 ```
 MYSQL_HOST= your.mysql.host
 MYSQL_PORT= 3306

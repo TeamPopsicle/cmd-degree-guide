@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Show the results of the generative algorithm in an easy to read visual page
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
@@ -20,6 +20,7 @@ export default function App() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Check on visit if user is logged in first, redirect to login if not
   useEffect(() => {
     if (loggedInUser === "") {
       router.push("/login");

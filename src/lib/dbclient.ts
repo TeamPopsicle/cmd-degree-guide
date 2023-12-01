@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Client side function that sends an API call to the server it's hosted on that runs an SQL query (see docstring)
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */

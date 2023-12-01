@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. Navbar visible on most pages to go back to home or other pages
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */

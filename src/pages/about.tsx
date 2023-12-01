@@ -1,5 +1,5 @@
 /*
-    i. a statement of what it represents or implements,
+    i. About page
     ii. Popsicle
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
