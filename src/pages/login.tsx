@@ -6,7 +6,7 @@
 
 import Navbar from "@/components/Navbar/Navbar";
 import Form from "@/components/Form";
-import { sendQuery } from "@/lib/dbclient";
+import { sendDbCommand } from "@/lib/dbclient";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { saveToLocalStorage } from "@/lib/LocalStorage";
@@ -19,9 +19,7 @@ export default function Login() {
     async function handleLogin(username: string, password: string) {
         if (username.length > 0 && password.length > 0) {
             // Check if user already exists
-            const existingUserCheckQuery = "SELECT * FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;"
-            const existingUserResponseObject = await sendQuery(existingUserCheckQuery, username);
-
+            const existingUserResponseObject = await sendDbCommand("getuser", username);
             // Check if database connection was successful
             if (!existingUserResponseObject.response.error) {
                 if (existingUserResponseObject.response.length > 0
@@ -31,8 +29,7 @@ export default function Login() {
                     saveToLocalStorage("loggedInUser", existingUserResponseObject.response[0].username);
                     setLoginMessage("Log in success! Redirecting in 3 seconds...");
                     // Check if schedule exists under user exists first
-                    const getScheduleContent = "SELECT `schedule` FROM `Users` WHERE username = ?";
-                    const getScheduleObject = await sendQuery(getScheduleContent, username);
+                    const getScheduleObject = await sendDbCommand("getschedule", username);
                     if (getScheduleObject.response[0].schedule) {
                         scheduleExists = true;
                     } else {

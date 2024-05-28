@@ -10,7 +10,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Navbar from "@/components/Navbar/Navbar";
 import Schedule from '@/components/Schedule';
-import { sendQuery } from '@/lib/dbclient';
+import { sendDbCommand } from '@/lib/dbclient';
 import { getLocalStorage } from '@/lib/LocalStorage';
 import styles from '@/styles/finalSchedule.module.css';
 
@@ -38,8 +38,8 @@ export default function App() {
   // Handle going back to the input page
   async function handleBack() {
     // Delete user schedule so they can properly go back to /input
-    const scheduleContent = "UPDATE `Users` SET `schedule` = NULL WHERE (`username` = ?);";
-    const scheduleResponseObject = await sendQuery(scheduleContent, loggedInUser);
+    //const scheduleContent = "UPDATE `Users` SET `schedule` = NULL WHERE (`username` = ?);";
+    const scheduleResponseObject = await sendDbCommand("deleteschedule", loggedInUser);
     if (!scheduleResponseObject.response.error) {
       router.push("/input");
     } else {

@@ -5,7 +5,7 @@
 */
 
 //database access
-import { sendQuery } from "./dbclient";
+import { sendDbCommand } from "./dbclient";
 
 /**
      * Class that eventually holds a DAG of all the required courses for the selected major (based off of user input and class info from database)
@@ -29,19 +29,19 @@ class MAJOR {
 
     private async initGraphs() {
         // CS Major
-        const dagCSQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'CS'");
+        const dagCSQuery = await sendDbCommand("getprereqs", "CS");
         const dagCS: { ClassNumber: string; PrereqFor: string[]; }[] = dagCSQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
             ClassNumber: item.ClassNumber,
             PrereqFor: JSON.parse(item.PrereqFor)
         }));
         // Math Major
-        const dagMathQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'MA'");
+        const dagMathQuery = await sendDbCommand("getprereqs", "MA");
         const dagMath: { ClassNumber: string; PrereqFor: string[]; }[] = dagMathQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
             ClassNumber: item.ClassNumber,
             PrereqFor: JSON.parse(item.PrereqFor)
         }));
         // DS Major
-        const dagDSQuery = await sendQuery("SELECT ClassNumber, PrereqFor FROM Classes WHERE Major = 'DS'");
+        const dagDSQuery = await sendDbCommand("getprereqs", "DS");
         const dagDS: { ClassNumber: string; PrereqFor: string[]; }[] = dagDSQuery.response.map((item: { ClassNumber: string; PrereqFor: string; }) => ({
             ClassNumber: item.ClassNumber,
             PrereqFor: JSON.parse(item.PrereqFor)

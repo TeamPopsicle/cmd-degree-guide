@@ -6,7 +6,7 @@
 
 import Navbar from "@/components/Navbar/Navbar";
 import Form from "@/components/Form";
-import { sendQuery } from "@/lib/dbclient";
+import { sendDbCommand } from "@/lib/dbclient";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { saveToLocalStorage } from "@/lib/LocalStorage";
@@ -18,15 +18,14 @@ export default function Signup() {
     async function handleLogin(username: string, password: string) {
         if (username.length > 0 && password.length > 0) {
             // Check if user already exists
-            const existingUserCheckQuery = "SELECT * FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;";
-            const existingUserResponseObject = await sendQuery(existingUserCheckQuery, username);
+            const existingUserResponseObject = await sendDbCommand("getuser", username);
 
             // Check if database connection was successful
             if (!existingUserResponseObject.response.error) {
                 if (existingUserResponseObject.response.length === 0) {
                     // User doesn't exist, register
-                    const registerUserContent = "INSERT INTO `cmd_degree_guide`.`Users` (`username`, `password`) VALUES (?, ?)";
-                    const registerResponseObject = await sendQuery(registerUserContent, username, password);
+                    //const registerUserContent = "INSERT INTO `cmd_degree_guide`.`Users` (`username`, `password`) VALUES (?, ?)";
+                    const registerResponseObject = await sendDbCommand("adduser", username, password);
                     if (registerResponseObject) {
                         saveToLocalStorage("loggedInUser", username);
                         setRegistrationMessage("New account created successfully! Redirecting in 3 seconds...");

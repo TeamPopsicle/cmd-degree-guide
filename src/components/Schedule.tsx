@@ -4,7 +4,7 @@
     iii. Ethan Cha, Peyton Elebash, Haley Figone, Yaya Yao
 */
 
-import { sendQuery } from "@/lib/dbclient";
+import { sendDbCommand } from "@/lib/dbclient";
 import { useEffect, useState } from "react";
 import styles from '@/styles/finalSchedule.module.css';
 import React from "react";
@@ -64,8 +64,7 @@ export default function Schedule({ seasons, loggedInUser, setErrorMessage }: Sch
         // Fetch and parse the terms data on the client side
         async function fetchSchedule() {
             if (loggedInUser) {
-                const termsContent = "SELECT `schedule` FROM `Users` WHERE username = ?";
-                const termsObject = await sendQuery(termsContent, loggedInUser);
+                const termsObject = await sendDbCommand("getschedule", loggedInUser);
                 if (!termsObject.response.error) {
                     console.log("terms", termsObject.response);
                     const terms = termsObject.response[0].schedule; // Get schedule from SQL response

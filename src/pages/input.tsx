@@ -7,7 +7,7 @@
 // Importing necessary modules and components
 import { runGenAlg } from "@/lib/GenAlg";
 import { getLocalStorage } from "@/lib/LocalStorage";
-import { sendQuery } from "@/lib/dbclient";
+import { sendDbCommand } from "@/lib/dbclient";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -31,8 +31,7 @@ function ClassesTakenTable({ major, coursesTaken, setCoursesTaken, setWarningMes
     // Any time the user sets their major, update the classesInMajor array
     useEffect(() => {
         async function fetchClasses() {
-            const classesContent = "SELECT `FullClassName`, `ClassNumber` FROM `Classes` WHERE Major = ?";
-            const classesResponseObject = await sendQuery(classesContent, major);
+            const classesResponseObject = await sendDbCommand("getclasses", major);
             if (!classesResponseObject.response.error) {
                 console.log(classesResponseObject.response)
                 setClassesInMajor(classesResponseObject.response);
@@ -112,8 +111,7 @@ export default function UserInput() {
         if (major !== "") {
             const schedule = await runGenAlg(termsLeft, coursesTaken.join(" "), major);
             if (schedule !== "") {
-                const scheduleContent = "UPDATE `Users` SET `schedule` = ? WHERE (`username` = ?);";
-                const scheduleResponseObject = await sendQuery(scheduleContent, schedule, loggedInUser);
+                const scheduleResponseObject = await sendDbCommand("setschedule", schedule, loggedInUser);
                 if (scheduleResponseObject) {
                     router.push("/finalSchedule")
                 }
