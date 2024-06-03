@@ -6,6 +6,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import mysql from 'serverless-mysql';
+import bcrypt from 'bcrypt';
 
 const db = mysql({
     config: {
@@ -66,10 +67,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             console.log("Request body:", req.body);
-            const { content } = req.body; // TODO: Remove content, only params
-            const result = await executeQuery("SELECT Username FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;", content);
-            res.status(200).json({ response: result });
-            console.log("success.", result)
+            const { content } = req.body;
+            const username = content[0];
+            const givenPassword = content[1];
+            const hashedPassword: any = await executeQuery("SELECT Password FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;", username);
+            if (hashedPassword.length > 0) {
+                if (bcrypt.compareSync(givenPassword, hashedPassword[0].Password)) {
+                    res.status(200).json({ response: "Login successful", login: true });
+                } else {
+                    res.status(401).json({ response: "Unauthorized"});
+                }
+            } else {
+                res.status(401).json({ response: "Unauthorized"});
+            }
         } catch (error) {
             res.status(500).json({ response: "Error", error });
         }

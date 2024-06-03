@@ -51,6 +51,16 @@ export async function sendDbCommand(command: string, ...params: any) {
                     body: JSON.stringify({ content: params }),
                 });
                 break;
+            case 'login':
+                response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+                    },
+                    body: JSON.stringify({ content: params }),
+                });
+                break;
             case 'getschedule':
                 response = await fetch('/api/getschedule', {
                     method: 'POST',

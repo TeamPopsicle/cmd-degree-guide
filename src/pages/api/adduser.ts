@@ -6,6 +6,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import mysql from 'serverless-mysql';
+import bcrypt from 'bcrypt';
 
 const db = mysql({
     config: {
@@ -66,7 +67,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             console.log("Request body:", req.body);
-            const { content } = req.body; // TODO: Remove content, only params
+            const { content } = req.body;
+
+            // Hash the password before storing it
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(content[1], salt); // index 1 is password, 0 is username
+            // Replace the plaintext password with the hashed password
+            content[1] = hashedPassword;
+
             const result = await executeQuery("INSERT INTO `cmd_degree_guide`.`Users` (`username`, `password`) VALUES (?, ?);", content);
             res.status(200).json({ response: result });
             console.log("success.", result)
