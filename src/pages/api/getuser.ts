@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             console.log("Request body:", req.body);
-            const { content } = req.body; // TODO: Remove content, only params
+            const { content } = req.body;
             const result = await executeQuery("SELECT Username FROM `cmd_degree_guide`.`Users` WHERE `username` = ?;", content);
             res.status(200).json({ response: result });
             console.log("success.", result)

@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             const { content } = req.body;
-            const result = await executeQuery("SELECT `schedule` FROM `Users` WHERE username = ?", content); // TODO: Change content to fixed sql statement
+            const result = await executeQuery("SELECT `schedule` FROM `Users` WHERE username = ?", content);
             res.status(200).json({ response: result });
             console.log("success.", result)
         } catch (error) {
