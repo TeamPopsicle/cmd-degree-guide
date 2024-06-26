@@ -12,5 +12,5 @@ import { NextApiRequest, NextApiResponse } from "next";
  * @param res API response instance
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    res.status(400).json({ error: 'This API endpoint is deprecated' });
+    res.status(400).json({ error: 'This API endpoint is deprecated: https://youtu.be/dQw4w9WgXcQ' });
 }
